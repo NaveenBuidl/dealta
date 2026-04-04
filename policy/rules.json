@@ -1,0 +1,92 @@
+[
+  {
+    "rule_id": "POL-001",
+    "name": "No Unilateral Contract Modification by Partner",
+    "description": "No clause may give the partner a unilateral right to change pricing, commercial terms, or scope. All amendments must be mutually agreed and signed by both parties.",
+    "applies_to": ["Legal", "Commercial"],
+    "trigger_keywords": ["unilateral", "sole discretion", "right to amend", "right to modify", "may change", "reserves the right to change"],
+    "violation_threshold": "Any clause granting partner unilateral right to modify pricing, scope, or commercial terms",
+    "severity": "critical"
+  },
+  {
+    "rule_id": "POL-002",
+    "name": "Payment Terms Standard",
+    "description": "Nexus standard payment term is 30 days upon invoice receipt. 14 days acceptable if commercially necessary. Under 14 days requires Finance sign-off. For revenue-generating contracts, collection terms must always be shorter than payment terms.",
+    "applies_to": ["Finance"],
+    "trigger_keywords": ["payment terms", "payment schedule", "invoice", "net-", "days of receipt", "settlement"],
+    "violation_threshold": "Payment terms shorter than 14 days without Finance sign-off. Collection terms longer than or equal to payment terms.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "POL-003",
+    "name": "Liability Cap Must Be Proportionate and Mutual",
+    "description": "Liability caps must reflect the deal's risk/benefit. Carve-outs that apply only to Nexus (asymmetric) require Legal sign-off. Non-limitable categories always apply: gross negligence, willful misconduct, death/injury, fraud, IP infringement, data protection violations.",
+    "applies_to": ["Legal"],
+    "trigger_keywords": ["liability cap", "limitation of liability", "carve-out", "shall not apply", "unlimited liability", "not limited to"],
+    "violation_threshold": "Asymmetric carve-out applied exclusively to Nexus, or exclusion of mandatory non-limitable categories",
+    "severity": "high"
+  },
+  {
+    "rule_id": "POL-004",
+    "name": "Governing Law Must Match Jurisdiction and Meet Regional Standards",
+    "description": "Governing law and jurisdiction must always be from the same country. For EU-based partners: German law and Berlin courts preferred; partner's local law acceptable if they insist. Any change to governing law or jurisdiction requires Legal sign-off.",
+    "applies_to": ["Legal", "Leadership"],
+    "trigger_keywords": ["governing law", "jurisdiction", "applicable law", "courts of", "laws of"],
+    "violation_threshold": "Governing law and jurisdiction from different countries. Or jurisdiction changed without Legal sign-off.",
+    "severity": "critical"
+  },
+  {
+    "rule_id": "POL-005",
+    "name": "Data Processing Agreement Required Where Applicable",
+    "description": "Where Nexus shares traveler personal data with a supplier processing it on Nexus's behalf, a DPA must exist confirming processor relationship. Removal of DPA requirement or shift to independent controller model requires Legal review.",
+    "applies_to": ["Legal"],
+    "trigger_keywords": ["data processor", "data controller", "DPA", "GDPR", "personal data", "traveler data", "processing purposes"],
+    "violation_threshold": "Removal of processor relationship or DPA requirement without Legal sign-off",
+    "severity": "critical"
+  },
+  {
+    "rule_id": "POL-006",
+    "name": "SLA P1 Resolution Must Be Defined and Enforceable",
+    "description": "For TSP agreements and critical technical providers, SLAs must include measurable metrics with clear breach triggers and termination rights. Degradation of SLA terms requires Product/Tech and CS review. P1 resolution time increases are material.",
+    "applies_to": ["Product/Tech", "CS"],
+    "trigger_keywords": ["P1", "Priority 1", "resolution time", "SLA", "incident response", "uptime", "availability"],
+    "violation_threshold": "P1 resolution time increased. SLA degradation without Product/Tech review.",
+    "severity": "high"
+  },
+  {
+    "rule_id": "POL-007",
+    "name": "Credit Facility Reductions Require Finance Approval",
+    "description": "Any reduction to Nexus's operating credit facility, or introduction of conditions allowing the partner to unilaterally reduce it, requires Finance sign-off.",
+    "applies_to": ["Finance"],
+    "trigger_keywords": ["credit facility", "booking volume", "credit limit", "reduce", "reserves the right to reduce"],
+    "violation_threshold": "Credit facility reduced or made contingent on volume without Finance sign-off",
+    "severity": "high"
+  },
+  {
+    "rule_id": "POL-008",
+    "name": "Termination for SLA Breach Must Not Require Remediation Plan from Nexus",
+    "description": "Nexus must retain immediate or short-notice termination rights for material SLA breach. Any clause requiring Nexus to provide a formal remediation plan to the partner before exercising termination rights is not acceptable — this reverses the standard and undermines Nexus's exit rights.",
+    "applies_to": ["Legal", "Commercial"],
+    "trigger_keywords": ["termination", "remediation plan", "cure period", "SLA breach", "written notice", "remedy"],
+    "violation_threshold": "Nexus's SLA-based termination right conditioned on Nexus providing a remediation plan or cure period to the partner",
+    "severity": "high"
+  },
+  {
+    "rule_id": "POL-009",
+    "name": "Exclusivity on Nexus Is Not Permitted",
+    "description": "Nexus must not agree to exclusivity clauses committing to work exclusively with a partner. Volume commitments may be offered as a compromise only with C-level, Director of Legal, and CEO sign-off.",
+    "applies_to": ["Legal", "Leadership", "Commercial"],
+    "trigger_keywords": ["exclusively", "exclusivity", "sole provider", "not engage", "only with partner", "volume commitment"],
+    "violation_threshold": "Any clause requiring Nexus to work exclusively with the partner",
+    "severity": "critical"
+  },
+  {
+    "rule_id": "POL-010",
+    "name": "Commission and Revenue Terms Must Be Mutually Agreed",
+    "description": "Commercial terms and pricing are material and must always be negotiated and mutually agreed. Any clause allowing the partner to unilaterally change commission rates or revenue share is not acceptable.",
+    "applies_to": ["Commercial", "Finance"],
+    "trigger_keywords": ["commission rate", "commission structure", "revenue share", "rate amendment", "unilateral", "right to amend commission"],
+    "violation_threshold": "Any clause giving partner unilateral right to change commission or revenue terms",
+    "severity": "high"
+  }
+]

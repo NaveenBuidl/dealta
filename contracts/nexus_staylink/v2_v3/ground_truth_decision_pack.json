@@ -1,0 +1,96 @@
+{
+  "contract_id": "nexus_staylink_001",
+  "version_reviewed": "v3",
+  "version_compared_against": "v2",
+  "generated_at": "[RUNTIME]",
+
+  "overall_recommendation": "ESCALATE",
+
+  "commercial_alignment_check": "NOT_AVAILABLE — requires pre-negotiation commercial charter as input. See DECISIONS.md.",
+
+  "summary_narrative": "[LLM_GENERATED]",
+
+  "review_progress": {
+    "total_changes_detected": 6,
+    "changes_with_issues": 3,
+    "changes_clean": 3,
+    "functions_signed_off": 0,
+    "functions_pending": 4
+  },
+
+  "escalation_items": [
+    {
+      "type": "critical_policy_violation",
+      "change_id": "C1",
+      "clause": 4,
+      "summary": "StayLink granted unilateral right to amend commission rates quarterly — violates POL-001. Commercial cannot sign off until mutual agreement is restored.",
+      "decision_needed": "Revert to mutual agreement requirement for commission amendments, or define acceptable bounds for StayLink-initiated reviews before proceeding."
+    },
+    {
+      "type": "critical_policy_violation",
+      "change_id": "C4",
+      "clause": 10,
+      "summary": "StayLink indemnification carve-out added unilaterally covering Nexus integration decisions — violates POL-001. Legal cannot sign off until renegotiated.",
+      "decision_needed": "Remove unilateral carve-out or renegotiate to reflect mutual understanding of integration responsibilities."
+    }
+  ],
+
+  "required_sign_offs": {
+    "Legal": "REQUIRED",
+    "Finance": "REQUIRED",
+    "Tax": "NOT_REQUIRED",
+    "CS": "NOT_REQUIRED",
+    "Product": "REQUIRED",
+    "Commercial": "REQUIRED"
+  },
+
+  "invalidated_sign_offs": [],
+
+  "critical_issues": [
+    {
+      "change_id": "C1",
+      "clause": 4,
+      "description": "Commission review shifted to unilateral StayLink control — quarterly, based on market conditions with 30-day notice only",
+      "policy_rule": "POL-001",
+      "severity": "critical",
+      "function": "Commercial"
+    },
+    {
+      "change_id": "C4",
+      "clause": 10,
+      "description": "StayLink indemnification obligations carved out for Nexus integration decisions, unilaterally added",
+      "policy_rule": "POL-001",
+      "severity": "critical",
+      "function": "Legal"
+    }
+  ],
+
+  "open_issues_count": {
+    "critical": 2,
+    "high": 2,
+    "medium": 0
+  },
+
+  "compound_risks": [
+    {
+      "risk_id": "CR1",
+      "change_ids": ["C1", "C2", "C3"],
+      "clauses_involved": [4, 5, 9],
+      "description": "Commission control loss (C1) + API suspension trigger (C2) + uncapped liability carve-out (C3) create a performance trap — a volume dip triggers reduced revenue, service disruption, and potentially unlimited financial liability simultaneously",
+      "severity": "critical",
+      "affected_functions": ["Finance", "Legal", "Commercial"],
+      "decision_required": "Model worst-case scenario: volume dip triggers all three simultaneously. Decide whether to accept any of these clauses before addressing the others — they are interdependent."
+    },
+    {
+      "risk_id": "CR2",
+      "change_ids": ["C2", "C3"],
+      "clauses_involved": [5, 9],
+      "description": "API suspension (C2) + uncapped liability (C3) mean a volume shortfall causes both operational shutdown and unlimited financial exposure to StayLink for the same trigger",
+      "severity": "high",
+      "affected_functions": ["Finance", "Legal", "Product/Tech"],
+      "decision_required": "C2 and C3 must be negotiated together — accepting one without the other leaves compounded exposure. Do not allow Legal to sign off on C3 before Product/Tech has reviewed C2."
+    }
+  ],
+
+  "pipeline_metrics": {}
+}

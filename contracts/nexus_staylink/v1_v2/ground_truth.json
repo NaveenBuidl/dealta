@@ -1,0 +1,269 @@
+{
+  "contract_pair": "v1_v2",
+  "changes": [
+    {
+      "change_id": "C1",
+      "clause_number": 1,
+      "clause_title": "Definitions",
+      "change_type": "material",
+      "v1_summary": "Definitions included API, Booking, Consumed Booking, Net Rate and Confidential Information.",
+      "v2_summary": "Adds a Business Day definition. Cosmetic — clarifies terminology without shifting obligations.",
+      "routing": {
+        "primary": null,
+        "secondary": null
+      },
+      "policy_flag": false,
+      "policy_rule_violated": null,
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": false,
+      "agent_test_notes": "Correct behavior: detect textual change but classify as cosmetic. No routing, no escalation."
+    },
+    {
+      "change_id": "C2",
+      "clause_number": 1,
+      "clause_title": "Definitions",
+      "change_type": "cosmetic",
+      "v1_summary": "Net Rate defined as the supplier rate before Nexus-added amounts unless expressly included.",
+      "v2_summary": "Net Rate rephrased from 'before the addition of' to 'exclusive of'. Legal-equivalent under English law.",
+      "routing": {
+        "primary": null,
+        "secondary": null
+      },
+      "policy_flag": false,
+      "policy_rule_violated": null,
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": false,
+      "agent_test_notes": "Correct behavior: cosmetic rewording. Likely failure mode: treating 'exclusive of' vs 'before the addition of' as a pricing scope change."
+    },
+    {
+      "change_id": "C3",
+      "clause_number": 4,
+      "clause_title": "Commission Structure",
+      "change_type": "material",
+      "v1_summary": "Nexus retained unilateral right to amend commission rate with 30 days written notice.",
+      "v2_summary": "Commission amendments now require mutual written agreement with 60 days notice. Removes Nexus unilateral right.",
+      "routing": {
+        "primary": "Commercial",
+        "secondary": "Finance"
+      },
+      "policy_flag": false,
+      "policy_rule_violated": null,
+      "compound_risk": true,
+      "compound_risk_partner": "C4, C5",
+      "compound_risk_description": "Commission control lost (C3) + credit halved (C4) + StayLink can reduce credit further on volume trigger (C5) = margin compression risk. No single clause creates this — the combination removes Nexus's commercial floor.",
+      "requires_escalation": false,
+      "agent_test_notes": "Important: this change is FAVORABLE to Nexus — it removes the partner's unilateral power. Must NOT be flagged as a policy violation. Likely failure mode: agent flags it as a violation of commission control when it actually improves Nexus's position."
+    },
+    {
+      "change_id": "C4",
+      "clause_number": 5,
+      "clause_title": "Payment Terms & Credit Facility",
+      "change_type": "material",
+      "v1_summary": "Nexus operated under a €50,000 bi-weekly credit facility.",
+      "v2_summary": "Credit facility reduced from €50,000 to €25,000.",
+      "routing": {
+        "primary": "Finance",
+        "secondary": "Commercial"
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-007: credit facility reduction requires Finance sign-off.",
+      "compound_risk": true,
+      "compound_risk_partner": "C3, C5",
+      "compound_risk_description": "Part of three-clause margin compression risk. Static credit reduction (C4) combined with commission control loss (C3) and dynamic downward trigger (C5) removes Nexus's financial floor.",
+      "requires_escalation": true,
+      "agent_test_notes": "Correct behavior: flag credit reduction, route to Finance. Likely failure mode: missing the 50% reduction magnitude."
+    },
+    {
+      "change_id": "C5",
+      "clause_number": 5,
+      "clause_title": "Payment Terms & Credit Facility",
+      "change_type": "material",
+      "v1_summary": "No conditional credit reduction mechanism existed.",
+      "v2_summary": "StayLink gains unilateral right to reduce credit facility if Nexus booking volume falls below €10,000/month.",
+      "routing": {
+        "primary": "Finance",
+        "secondary": "Commercial"
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-001: partner unilateral modification not permitted. POL-007: credit contingency requires Finance sign-off.",
+      "compound_risk": true,
+      "compound_risk_partner": "C3, C4",
+      "compound_risk_description": "Amplifying clause in the margin compression risk. Adds a dynamic volume-triggered downgrade on top of the static reduction in C4, while C3 removes Nexus's ability to offset via commission.",
+      "requires_escalation": true,
+      "agent_test_notes": "Correct behavior: flag both the unilateral trigger and Finance sign-off requirement. Likely failure mode: missing the dynamic downgrade mechanism, only catching the static reduction in C4."
+    },
+    {
+      "change_id": "C6",
+      "clause_number": 6,
+      "clause_title": "Pricing & Most Favoured Nation",
+      "change_type": "cosmetic",
+      "v1_summary": "StayLink required to use commercially reasonable efforts for competitive rates.",
+      "v2_summary": "Changed to reasonable endeavours. Legal-equivalent under English law in this context.",
+      "routing": {
+        "primary": null,
+        "secondary": null
+      },
+      "policy_flag": false,
+      "policy_rule_violated": null,
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": false,
+      "agent_test_notes": "Correct behavior: cosmetic under English law. Likely failure mode: over-triggering on the effort standard change."
+    },
+    {
+      "change_id": "C7",
+      "clause_number": 7,
+      "clause_title": "Service Level Agreements (SLAs)",
+      "change_type": "material",
+      "v1_summary": "P1 incident resolution within 4 hours. Nexus termination right after 3 P1 incidents in 4 months.",
+      "v2_summary": "P1 resolution extended to 8 hours. Termination trigger unchanged.",
+      "routing": {
+        "primary": "Product/Tech",
+        "secondary": "CS"
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-006: P1 resolution time increase is material and requires Product/Tech review.",
+      "compound_risk": true,
+      "compound_risk_partner": "C11",
+      "compound_risk_description": "Slower P1 response combined with C11's termination friction creates compounded operational exposure — Nexus can't exit quickly and must endure longer outages.",
+      "requires_escalation": false,
+      "agent_test_notes": "Correct behavior: material SLA degradation, route to Product/Tech primary. Must tag compound risk with C11. Likely failure mode: routing to CS instead of Product/Tech, or missing the compound risk link."
+    },
+    {
+      "change_id": "C8",
+      "clause_number": 9,
+      "clause_title": "Liability & Limitation of Liability",
+      "change_type": "material",
+      "v1_summary": "Mutual liability cap at 12 months fees, no Nexus-specific carve-outs.",
+      "v2_summary": "Adds carve-out: liability cap does not apply to claims from Nexus's failure to implement StayLink's required API security updates.",
+      "routing": {
+        "primary": "Legal",
+        "secondary": "Product/Tech"
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-003: asymmetric carve-out applied exclusively to Nexus requires Legal sign-off.",
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": true,
+      "agent_test_notes": "Correct behavior: flag asymmetric carve-out, route Legal primary. Likely failure mode: reading as narrow cybersecurity clause and missing that StayLink controls the trigger via its own documentation."
+    },
+    {
+      "change_id": "C9",
+      "clause_number": 11,
+      "clause_title": "Data Protection & GDPR",
+      "change_type": "material",
+      "v1_summary": "StayLink processed Nexus traveler data as data processor under a separate DPA.",
+      "v2_summary": "Processor relationship and DPA requirement removed. Both parties now independent controllers.",
+      "routing": {
+        "primary": "Legal",
+        "secondary": null
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-005: removal of DPA requirement requires Legal sign-off.",
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": true,
+      "agent_test_notes": "Correct behavior: treat as major data allocation change, not drafting cleanup. Flag and escalate to Legal. Likely failure mode: both versions mention independent controllers so agent misses that processor role for traveler data was removed."
+    },
+    {
+      "change_id": "C10",
+      "clause_number": 12,
+      "clause_title": "Confidentiality",
+      "change_type": "cosmetic",
+      "v1_summary": "Confidentiality exceptions were a closed list.",
+      "v2_summary": "Adds 'including but not limited to' making exceptions non-exhaustive. Subtly broadens what falls outside confidentiality obligations.",
+      "routing": {
+        "primary": null,
+        "secondary": null
+      },
+      "policy_flag": false,
+      "policy_rule_violated": null,
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": false,
+      "agent_test_notes": "Borderline material — defensible either way. Classified material because broadening exception scope is a real shift even if low severity. No routing required."
+    },
+    {
+      "change_id": "C11",
+      "clause_number": 14,
+      "clause_title": "Termination Rights",
+      "change_type": "material",
+      "v1_summary": "Nexus could exercise SLA termination rights directly.",
+      "v2_summary": "Nexus must now provide StayLink a written remediation plan and 30-day cure period before exercising SLA termination rights.",
+      "routing": {
+        "primary": "Legal",
+        "secondary": "Commercial"
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-008: Nexus termination right for SLA breach must not be conditioned on providing a remediation plan to the partner.",
+      "compound_risk": true,
+      "compound_risk_partner": "C7",
+      "compound_risk_description": "Combined with C7's P1 SLA extension, Nexus faces both longer outages and harder exit — compounded operational exposure.",
+      "requires_escalation": false,
+      "agent_test_notes": "Correct behavior: flag as policy violation and link to C7 compound risk. Likely failure mode: treating as generic legal process language without connecting to SLA deterioration."
+    },
+    {
+      "change_id": "C12",
+      "clause_number": 15,
+      "clause_title": "Governing Law & Jurisdiction",
+      "change_type": "material",
+      "v1_summary": "Agreement governed by laws of England and Wales.",
+      "v2_summary": "Agreement now governed by laws of Spain.",
+      "routing": {
+        "primary": "Legal",
+        "secondary": "Leadership"
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-004: governing law change requires Legal sign-off. Spain is partner's local law — acceptable per policy but not automatic.",
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": true,
+      "agent_test_notes": "Near-miss not hard violation — Spain is StayLink's local law which is acceptable per playbook. But still requires Legal sign-off. Likely failure mode: treating as boilerplate or escalating to Leadership before Legal."
+    },
+    {
+      "change_id": "C13",
+      "clause_number": 15,
+      "clause_title": "Governing Law & Jurisdiction",
+      "change_type": "material",
+      "v1_summary": "Exclusive jurisdiction in courts of England.",
+      "v2_summary": "Exclusive jurisdiction now in courts of Barcelona, Spain.",
+      "routing": {
+        "primary": "Legal",
+        "secondary": "Leadership"
+      },
+      "policy_flag": true,
+      "policy_rule_violated": "POL-004: jurisdiction change requires Legal sign-off.",
+      "compound_risk": false,
+      "compound_risk_partner": null,
+      "compound_risk_description": null,
+      "requires_escalation": true,
+      "agent_test_notes": "Separate entry from C12 — governing law and jurisdiction are distinct changes even though both in clause 15. Likely failure mode: merging with C12 and only producing one flag."
+    },
+    {
+      "change_id": "C8_C9",
+      "clause_number": null,
+      "clause_title": "Compound Risk: Liability + DPA",
+      "change_type": "compound",
+      "routing": {
+        "primary": "Legal",
+        "secondary": "Product/Tech"
+      },
+      "policy_flag": false,
+      "policy_rule_violated": null,
+      "compound_risk": true,
+      "compound_risk_partner": "C8, C9",
+      "compound_risk_description": "Uncapped liability carve-out (C8) + DPA removal (C9) = data processing responsibilities ambiguous precisely when uncapped liability exposure is highest.",
+      "requires_escalation": true,
+      "agent_test_notes": "CR3 was surfaced by the model unprompted in Session 4. Validated as genuine compound risk. Bonus find — if model misses it in a given run, document as known variance."
+    }
+  ]
+}

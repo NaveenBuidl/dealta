@@ -1,0 +1,107 @@
+{
+  "contract_pair": "v2_v3",
+  "changes": [
+    {
+      "change_id": "C1",
+      "clause_number": 4,
+      "clause_title": "Commission Structure",
+      "change_type": "material",
+      "materiality_level": "critical",
+      "v2_summary": "Commission amendments required mutual written agreement with 60 days notice.",
+      "v3_summary": "Commission reviews now quarterly at StayLink's discretion. Nexus limited to one extraordinary review request per year which StayLink may ignore.",
+      "invalidates_signoff": true,
+      "invalidates_signoff_on_clause": 4,
+      "invalidates_signoff_function": "Finance",
+      "invalidation_reasoning": "Finance approved commission terms assuming review mechanism was mutually controlled. v3 transfers unilateral control to StayLink. The assumption behind the approval no longer holds.",
+      "routing": {"primary": "Commercial", "secondary": "Finance"},
+      "policy_rules_triggered": ["POL-001", "POL-010"],
+      "compound_risk": true,
+      "compound_risk_partner_clauses": [5],
+      "agent_test_notes": "Primary invalidating change. invalidated_by_change_id must point here. POL-001 and POL-010 should both fire."
+    },
+    {
+      "change_id": "C2",
+      "clause_number": 5,
+      "clause_title": "Payment Terms & Credit Facility",
+      "change_type": "material",
+      "materiality_level": "high",
+      "v2_summary": "StayLink could reduce credit facility if volume fell below €10,000 monthly.",
+      "v3_summary": "StayLink can now suspend API access entirely after three consecutive months below €10,000. Suspension is not a breach. Reinstatement requires StayLink approval of a recovery plan.",
+      "invalidates_signoff": false,
+      "invalidates_signoff_on_clause": null,
+      "invalidates_signoff_function": null,
+      "invalidation_reasoning": null,
+      "routing": {"primary": "Product/Tech", "secondary": "Finance"},
+      "policy_rules_triggered": ["POL-001"],
+      "compound_risk": true,
+      "compound_risk_partner_clauses": [4, 9],
+      "agent_test_notes": "Participates in two compound risks. Individually flagged under POL-001. Does NOT invalidate any sign-off."
+    },
+    {
+      "change_id": "C3",
+      "clause_number": 10,
+      "clause_title": "Indemnification",
+      "change_type": "material",
+      "materiality_level": "high",
+      "v2_summary": "StayLink indemnified Nexus for content inaccuracies from supplier-controlled content.",
+      "v3_summary": "Indemnification now excludes claims arising from Nexus's integration decisions, technical implementation choices, display logic, or content modifications.",
+      "invalidates_signoff": false,
+      "invalidates_signoff_on_clause": null,
+      "invalidates_signoff_function": null,
+      "invalidation_reasoning": null,
+      "routing": {"primary": "Legal", "secondary": null},
+      "policy_rules_triggered": [],
+      "compound_risk": false,
+      "compound_risk_partner_clauses": [],
+      "agent_test_notes": "No policy rule fires. Detection and routing only. This is intentional — tests that the system handles material changes with no matching rule correctly."
+    },
+    {
+      "change_id": "C4",
+      "clause_number": 9,
+      "clause_title": "Liability & Limitation of Liability",
+      "change_type": "material",
+      "materiality_level": "critical",
+      "v2_summary": "Liability cap excluded only Nexus's failure to implement security updates.",
+      "v3_summary": "Liability cap now also excluded for StayLink claims arising from Nexus booking volumes falling below Clause 5 thresholds.",
+      "invalidates_signoff": false,
+      "invalidates_signoff_on_clause": null,
+      "invalidates_signoff_function": null,
+      "invalidation_reasoning": null,
+      "routing": {"primary": "Legal", "secondary": "Finance"},
+      "policy_rules_triggered": ["POL-003"],
+      "compound_risk": true,
+      "compound_risk_partner_clauses": [5],
+      "agent_test_notes": "Participates in compound risk with Clause 5. POL-003 asymmetric carve-out fires. Does NOT invalidate any sign-off."
+    }
+  ],
+  "sign_offs_to_invalidate": [
+    {
+      "signoff_id": "SO-001",
+      "function": "Finance",
+      "issue_id": "ISS-001",
+      "approved": true,
+      "signed_off_in_version": "v2",
+      "clause_number": 4,
+      "clause_title": "Commission Structure",
+      "invalidated": true,
+      "invalidated_by_change_id": "C1",
+      "invalidated_by_clause_number": 4,
+      "invalidated_in_version": "v3",
+      "invalidation_reasoning": "Finance approved commission terms assuming review mechanism was mutually controlled. v3 shifts unilateral control to StayLink, directly breaking the assumption behind the approval."
+    }
+  ],
+  "compound_risks": [
+    {
+      "risk_id": "CR1",
+      "clause_numbers": [4, 5],
+      "description": "Commission control lost + API suspension right = Nexus loses commercial lever to recover volume while simultaneously facing service suspension if volume drops.",
+      "severity": "critical"
+    },
+    {
+      "risk_id": "CR2",
+      "clause_numbers": [5, 9],
+      "description": "API suspension right + uncapped liability for volume shortfall = StayLink can suspend service on volume grounds then pursue unlimited damages for that same volume shortfall.",
+      "severity": "critical"
+    }
+  ]
+}

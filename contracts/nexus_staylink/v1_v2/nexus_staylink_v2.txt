@@ -1,0 +1,63 @@
+# Supplier API Partnership Agreement
+
+This Supplier API Partnership Agreement ("Agreement") is entered into between **Nexus Travel GmbH**, a company incorporated under the laws of Germany with its registered office in Berlin, Germany ("Nexus"), and **StayLink Group**, a company incorporated under the laws of Spain with its registered office in Barcelona, Spain ("StayLink"). This Agreement sets out the terms under which StayLink shall provide accommodation inventory and related content to Nexus via application programming interface for onward distribution to travelers through Nexus channels.
+
+## 1. Definitions
+
+For the purposes of this Agreement, the following terms shall have the meanings set out below. "API" means the technical interface made available by StayLink to permit Nexus to search, book, amend and cancel accommodation inventory. "Booking" means a reservation for accommodation confirmed through the API and placed by or on behalf of a traveler via Nexus. "Consumed Booking" means a Booking where the traveler has completed the stay and the booking has not been cancelled, refunded or otherwise reversed. "Business Day" means any day other than a Saturday, Sunday or public holiday in Spain or the United Kingdom. "Net Rate" means the accommodation rate supplied by StayLink to Nexus, exclusive of any markup, service fee, tax, duty or similar amount applied by Nexus unless such amount is expressly included by StayLink. "Confidential Information" means any non-public business, commercial, financial, technical or operational information disclosed by one party to the other in connection with this Agreement.
+
+## 2. Scope of Services
+
+StayLink shall make available to Nexus its accommodation inventory, related descriptive content, rate and availability information, booking functionality, amendment functionality and cancellation functionality through the API for use in Nexus consumer and partner-facing booking channels. Nexus shall use the API solely for the purpose of marketing, displaying and facilitating Bookings for end travelers in accordance with this Agreement. StayLink shall remain responsible for its contracting arrangements with underlying accommodation providers and for ensuring that inventory made available through the API may lawfully be distributed by Nexus in the agreed territories.
+
+## 3. API Integration & Technical Requirements
+
+The parties shall cooperate in good faith to complete the API integration and any associated certification, testing and go-live requirements. Nexus shall implement the API in accordance with StayLink's then-current technical documentation and shall use commercially reasonable efforts to maintain compatibility with supported API versions. StayLink shall provide reasonably necessary technical documentation, sandbox access and integration support during standard business hours. Each party shall be responsible for the security and integrity of its own systems and shall notify the other without undue delay of any incident that materially affects the API connection, booking processing or data exchange between the parties.
+
+## 4. Commission Structure
+
+StayLink shall be entitled to a commission equal to **7% on all consumed bookings, reviewed monthly for first 3 months then quarterly**. Commission shall be calculated on the applicable Net Rate for each Consumed Booking unless otherwise expressly agreed in writing. **Commission rate amendments require mutual written agreement with 60 days notice.** Any such amendment shall apply only prospectively to Bookings made after the effective date of the revised commission rate.
+
+## 5. Payment Terms & Credit Facility
+
+The parties agree that Nexus shall operate under a **€25,000 bi-weekly, 7-day payment terms** credit facility. StayLink shall issue invoices on a bi-weekly basis in respect of Bookings falling due within the applicable billing period, and Nexus shall settle undisputed amounts within seven (7) calendar days of invoice date. **StayLink suspension right if Nexus fails payment obligations** shall apply, provided StayLink has first given Nexus written notice of the relevant non-payment and a reasonable opportunity to cure where commercially practicable. StayLink reserves the right to reduce the credit facility by written notice if Nexus's booking volume falls below €10,000 in any calendar month. For invoicing and settlement purposes, the applicable booking currency shall be **GBP for UK hotels, EUR for European hotels, USD for rest of world**. In the event of a billing discrepancy, **Nexus may withhold disputed invoice amounts if discrepancy identified within 15 days of receipt; StayLink has 45 days to respond; Nexus has 45 days to accept or reject** the proposed resolution, and the undisputed portion shall remain payable in accordance with this Clause.
+
+## 6. Pricing & Most Favoured Nation
+
+StayLink shall use reasonable endeavours to provide competitive accommodation rates to Nexus for inventory supplied under this Agreement. The parties acknowledge that rates may vary by distribution channel, market, traveler segment, packaging structure, promotional campaign, inventory source and applicable restrictions. For the avoidance of doubt, this Clause does not create any absolute or binding obligation on StayLink to match or beat rates offered through any third-party distributor, intermediary or direct supplier channel.
+
+## 7. Service Level Agreements (SLAs)
+
+StayLink shall provide and support the API in accordance with reasonable industry standards and shall use commercially reasonable efforts to ensure stable availability and timely incident response. **SLA — API uptime: 99.5% monthly**. For Priority 1 incidents, being incidents causing complete booking failure, complete outage or other critical service interruption materially affecting transaction capability, **Resolution within 8 hours; Nexus termination right if StayLink exceeds 3 P1 incidents in any 4-month period**. For Priority 2 incidents, being incidents causing significant but non-critical degradation in booking functionality or traveler experience, **Resolution within 8 hours; termination right if SLA breached 3+ times in any 3-month period**. The parties shall maintain reasonable incident escalation procedures and operational contacts.
+
+## 8. Customer Support Obligations
+
+StayLink shall provide second-line support to Nexus for supplier-side issues relating to inventory, booking status, amendment processing, cancellation processing, confirmation failures and other operational matters attributable to StayLink or its upstream accommodation providers. Nexus shall remain responsible for first-line customer support to travelers. The parties agree to cooperate in good faith to resolve traveler-impacting issues promptly. For cancellation handling, the parties agree to a **2 hours tech cancellation + 1 hour general grace period for customer input errors**, provided the relevant request is submitted within the applicable window and no supplier-specific restriction prevents reversal.
+
+## 9. Liability & Limitation of Liability
+
+Subject to Clause 10 and except in respect of liability that cannot lawfully be excluded or limited, each party's aggregate liability arising out of or in connection with this Agreement, whether in contract, tort (including negligence), misrepresentation, restitution or otherwise, shall be limited to **12 months of fees paid in the preceding year, mutual**. The liability cap shall not apply to claims arising from Nexus's failure to implement StayLink's required API security updates within the timeframe specified in StayLink's technical documentation. Neither party shall be liable to the other for any indirect, incidental, special, consequential or punitive damages, including loss of profit, loss of goodwill, loss of business opportunity or loss of anticipated savings, except to the extent such losses arise from third-party claims for which indemnification is expressly provided under this Agreement.
+
+## 10. Indemnification
+
+StayLink shall defend, indemnify and hold harmless Nexus, its affiliates and their respective directors, officers and employees from and against third-party claims, losses, liabilities, damages, costs and expenses arising from **accommodation content inaccuracies** supplied by StayLink or its upstream providers, including materially inaccurate descriptions, amenities, location data, room characteristics, cancellation conditions or other supplier-controlled content where such inaccuracy gives rise to traveler, regulatory or partner claims. Nexus shall promptly notify StayLink of any such claim and provide reasonable cooperation at StayLink's expense.
+
+## 11. Data Protection & GDPR
+
+Each party shall determine its own data processing purposes and means and shall act as an independent data controller. Each party shall comply with applicable data protection laws, including the UK GDPR and EU GDPR where applicable, and shall implement appropriate technical and organisational measures to protect personal data against unauthorised or unlawful processing, accidental loss, destruction, damage or disclosure.
+
+## 12. Confidentiality
+
+Each party shall keep confidential and not disclose to any third party any Confidential Information of the other party except to its employees, professional advisers, auditors, subcontractors and affiliates who have a need to know such information for the purposes of this Agreement and who are bound by confidentiality obligations no less protective than those set out herein. The receiving party shall use the disclosing party's Confidential Information solely for the performance of this Agreement and shall protect it using at least the same degree of care it applies to its own confidential information of a similar nature, and in any event no less than reasonable care. These obligations shall not apply to information that is or becomes public other than through breach, was lawfully known prior to disclosure, is lawfully received from a third party, or is independently developed without reference to the disclosing party's Confidential Information, **including but not limited to** information falling within the foregoing categories.
+
+## 13. Term & Renewal
+
+This Agreement shall commence on the Effective Date and shall continue for an initial term of **12 months, auto-renewal unless terminated 90 days prior** to the end of the then-current term. Thereafter, the Agreement shall automatically renew for successive periods of twelve (12) months unless either party gives the other not less than ninety (90) days' written notice of non-renewal prior to the expiry of the then-current term.
+
+## 14. Termination Rights
+
+Either party may terminate this Agreement for material breach by the other party if such breach remains uncured for thirty (30) days following written notice specifying the breach in reasonable detail, provided that where the breach is incapable of cure the non-breaching party may terminate immediately. Nexus may only exercise termination rights under the SLA provisions after providing StayLink with a formal written remediation plan and a 30-day cure period. Either party may also terminate this Agreement immediately upon written notice if the other party becomes insolvent, enters administration, liquidation or any analogous process, ceases or threatens to cease business, or commits fraud or wilful misconduct materially affecting the commercial relationship. Any termination rights expressly set out elsewhere in this Agreement shall apply in addition to the rights set out in this Clause.
+
+## 15. Governing Law & Jurisdiction
+
+This Agreement and any non-contractual obligations arising out of or in connection with it shall be governed by the laws of Spain. The parties agree that the courts of Barcelona, Spain shall have exclusive jurisdiction to settle any dispute, controversy or claim arising out of or in connection with this Agreement, its subject matter or formation.

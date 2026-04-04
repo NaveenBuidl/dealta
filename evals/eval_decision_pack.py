@@ -62,19 +62,19 @@ def run_eval(pipeline_output_path, ground_truth_path="contracts/nexus_staylink/v
         "actual": actual_count
     })
 
-    # ------------------------------------------------------------------
-    # CHECK 3: required_sign_offs contains at least 3 REQUIRED functions
-    # Legal, Finance, Product, Commercial all flagged in pipeline
+# ------------------------------------------------------------------
+    # CHECK 3: required_sign_offs contains at least 2 INVALIDATED functions
+    # Stateful path: Finance, Commercial, Legal sign-offs invalidated in v3
     # ------------------------------------------------------------------
     sign_offs = dp.get("required_sign_offs", {})
-    required_count = sum(1 for v in sign_offs.values() if v == "REQUIRED")
-    passed = required_count >= 3
+    invalidated_count = sum(1 for v in sign_offs.values() if v == "INVALIDATED")
+    passed = invalidated_count >= 2
     results.append({
         "check": 3,
-        "name": "required_sign_offs has at least 3 REQUIRED functions",
+        "name": "required_sign_offs has at least 2 INVALIDATED functions",
         "passed": passed,
-        "expected": ">=3",
-        "actual": required_count
+        "expected": ">=2",
+        "actual": invalidated_count
     })
 
     # ------------------------------------------------------------------

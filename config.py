@@ -23,8 +23,8 @@ langfuse = Langfuse(
 
 current_trace_id = None  # set by run.py before graph.invoke(); shared across all agent calls
 
-# PROVIDER = "gemini"
-PROVIDER = "openai"  # PAID!
+PROVIDER = "gemini"
+# PROVIDER = "openai"  # PAID!
 
 # Gemini fallback chain — tried in order until one has quota
 GEMINI_MODELS_FALLBACK = [

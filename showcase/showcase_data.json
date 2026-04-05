@@ -1,0 +1,524 @@
+{
+  "contract_id": "nexus_staylink_001",
+  "prev_version": "v2",
+  "curr_version": "v3",
+  "detected_changes": [
+    {
+      "change_id": "C1",
+      "clause_number": 4,
+      "clause_title": "Commission Structure",
+      "change_type": "material",
+      "materiality_level": "medium",
+      "v_prev_summary": "Commission reviewed monthly for first 3 months then quarterly.",
+      "v_curr_summary": "Commission rates to be reviewed by StayLink quarterly based on various factors.",
+      "detection_reasoning": "The change shifts the commission review mechanism from a fixed schedule to a StayLink-controlled quarterly review process, altering Nexus's expectation about how and when commission rates may change."
+    },
+    {
+      "change_id": "C2",
+      "clause_number": 5,
+      "clause_title": "Payment Terms & Credit Facility",
+      "change_type": "material",
+      "materiality_level": "high",
+      "v_prev_summary": "StayLink can suspend access if Nexus fails payment obligations.",
+      "v_curr_summary": "StayLink can suspend access if Nexus's booking volume falls below a threshold for three consecutive months.",
+      "detection_reasoning": "The introduction of a volume threshold for access suspension significantly affects the operational and financial dynamics between the parties, increasing the risk if Nexus fails to meet booking volume expectations."
+    },
+    {
+      "change_id": "C3",
+      "clause_number": 9,
+      "clause_title": "Liability & Limitation of Liability",
+      "change_type": "material",
+      "materiality_level": "high",
+      "v_prev_summary": "Liability cap applies to both parties' aggregate liability.",
+      "v_curr_summary": "Liability cap asymmetry introduced for claims related to Nexus's booking volumes.",
+      "detection_reasoning": "The change creates an asymmetrical liability structure that increases Nexus's potential risk exposure related to its booking performance, fundamentally altering the obligations and rights between the parties."
+    },
+    {
+      "change_id": "C4",
+      "clause_number": 10,
+      "clause_title": "Indemnification",
+      "change_type": "material",
+      "materiality_level": "high",
+      "v_prev_summary": "StayLink is liable for accommodation content inaccuracies.",
+      "v_curr_summary": "Indemnification obligations limited concerning Nexus's integration decisions.",
+      "detection_reasoning": "The change significantly narrows the scope of StayLink\u2019s indemnification responsibilities, affecting risk allocation and liability in the event of claims arising from Nexus's actions."
+    }
+  ],
+  "routing_decisions": [
+    {
+      "change_id": "C1",
+      "primary_function": "Commercial",
+      "secondary_function": null,
+      "routing_reasoning": "The change modifies the commission review mechanism to a StayLink-controlled process, which directly impacts the partnership terms and commission structures, making Commercial the primary function for review."
+    },
+    {
+      "change_id": "C2",
+      "primary_function": "Finance",
+      "secondary_function": null,
+      "routing_reasoning": "The introduction of a volume threshold for access suspension affects payment terms and financial exposure, making Finance the primary function responsible for assessing the implications of this change."
+    },
+    {
+      "change_id": "C3",
+      "primary_function": "Legal",
+      "secondary_function": null,
+      "routing_reasoning": "The introduction of asymmetrical liability introduces significant legal implications related to liability and risk exposure, which falls under Legal's responsibilities."
+    },
+    {
+      "change_id": "C4",
+      "primary_function": "Legal",
+      "secondary_function": null,
+      "routing_reasoning": "The limitation of indemnification obligations alters liability and risk allocation, which are core legal considerations for contractual agreements, making Legal the primary function for review."
+    }
+  ],
+  "policy_flags": [
+    {
+      "change_id": "C1",
+      "rule_id": "POL-010",
+      "rule_name": "Commission and Revenue Terms Must Be Mutually Agreed",
+      "flag_type": "violation",
+      "severity": "high",
+      "explanation": "The change allows StayLink to unilaterally control the commission review process, which violates the requirement for commercial terms to be mutually agreed.",
+      "recommended_action": "Negotiate terms to ensure commission structure is mutually agreed."
+    },
+    {
+      "change_id": "C3",
+      "rule_id": "POL-003",
+      "rule_name": "Liability Cap Must Be Proportionate and Mutual",
+      "flag_type": "violation",
+      "severity": "high",
+      "explanation": "The liability cap introduces an asymmetry by excluding StayLink from the liability cap regarding Nexus's booking volumes, requiring Legal sign-off.",
+      "recommended_action": "Obtain Legal review and approval before finalizing this change."
+    },
+    {
+      "change_id": "C4",
+      "rule_id": "POL-004",
+      "rule_name": "Governing Law Must Match Jurisdiction and Meet Regional Standards",
+      "flag_type": "violation",
+      "severity": "critical",
+      "explanation": "The change in indemnification obligations limits StayLink's responsibilities significantly without mutual agreement, violating the requirement for such terms to be mutually accepted.",
+      "recommended_action": "Ensure indemnification terms are reviewed and mutually agreed before implementation."
+    }
+  ],
+  "compound_risks": [
+    {
+      "risk_id": "CR1",
+      "change_ids": [
+        "C1",
+        "C2",
+        "C3"
+      ],
+      "description": "The combination introduces a risk where StayLink's unilateral control over commission rates and the introduction of a volume threshold for access suspension, coupled with the asymmetrical liability cap for booking volumes, creates a situation where Nexus faces heightened financial exposure without adequate recourse.",
+      "affected_functions": [
+        "Legal",
+        "Finance"
+      ],
+      "severity": "critical",
+      "reasoning": "C1 allows StayLink to control commission adjustments, C2 imposes a threshold that can lead to suspension of services, and C3 introduces asymmetrical liability linked to Nexus's booking performance \u2014 together, they trap Nexus in a position of financial vulnerability with limited negotiation leverage and increased risk exposure."
+    },
+    {
+      "risk_id": "CR2",
+      "change_ids": [
+        "C2",
+        "C3",
+        "C4"
+      ],
+      "description": "The combination creates a scenario where Nexus's inability to meet booking volume can lead to service suspension, heightening liability exposure due to asymmetrical limits, while also reducing indemnification protections for Nexus's actions, amplifying the consequence of volume inadequacies.",
+      "affected_functions": [
+        "Legal",
+        "Commercial",
+        "Finance"
+      ],
+      "severity": "high",
+      "reasoning": "C2 introduces the risk of service suspension based on performance, C3 elevates liability exposure regarding bookings, and C4 limits StayLink's indemnification responsibilities \u2014 this trio creates a precarious situation for Nexus where operational shortcomings could lead to significant financial and legal repercussions with reduced protection."
+    }
+  ],
+  "issue_register": [],
+  "sign_offs": [
+    {
+      "signoff_id": "SO-001",
+      "function": "Finance",
+      "issue_id": "ISS-001",
+      "approved": true,
+      "conditions": "Approved subject to:\n    (1) commission review mechanism remaining Nexus-initiated or mutually triggered \u2014\n    any shift to unilateral StayLink control  of commission reviews requires Finance re-review;\n    (2) SLA terms remaining at v2  levels;\n    (3) no new unilateral rights introduced affecting service continuity or commercial terms that\n    would alter the risk profile of the commission structure.",
+      "signed_off_in_version": "v2",
+      "invalidated": true,
+      "invalidated_by_change_id": "C1",
+      "invalidated_in_version": "v3",
+      "timestamp": "2026-04-04T17:52:58.658815+00:00"
+    },
+    {
+      "signoff_id": "SO-002",
+      "function": "Commercial",
+      "issue_id": "ISS-002",
+      "approved": true,
+      "conditions": "Approved subject to commission amendments remaining mutually agreed between both parties. Any shift to unilateral partner control of commission review timing, frequency, or methodology requires Commercial re-review.",
+      "signed_off_in_version": "v2",
+      "invalidated": true,
+      "invalidated_by_change_id": "C1",
+      "invalidated_in_version": "v3",
+      "timestamp": "2026-04-04T17:52:58.658872+00:00"
+    },
+    {
+      "signoff_id": "SO-003",
+      "function": "Legal",
+      "issue_id": "ISS-003",
+      "approved": true,
+      "conditions": "Approved subject to liability cap carve-out remaining limited to API security implementation failures only. Any expansion of carve-out scope to cover commercial performance, volume thresholds, or other non-security triggers requires Legal re-review.",
+      "signed_off_in_version": "v2",
+      "invalidated": true,
+      "invalidated_by_change_id": "C3",
+      "invalidated_in_version": "v3",
+      "timestamp": "2026-04-04T17:52:58.658888+00:00"
+    }
+  ],
+  "escalation_items": [
+    {
+      "escalation_id": "ESC-001",
+      "issue_id": "ISS-C1",
+      "reason": "The change allows StayLink to unilaterally control the commission review process, which violates the requirement for commercial terms to be mutually agreed.",
+      "decision_required": "Negotiate terms to ensure commission structure is mutually agreed.",
+      "blocking_functions": [
+        "Commercial"
+      ],
+      "priority": "high"
+    },
+    {
+      "escalation_id": "ESC-002",
+      "issue_id": "ISS-C3",
+      "reason": "The liability cap introduces an asymmetry by excluding StayLink from the liability cap regarding Nexus's booking volumes, requiring Legal sign-off.",
+      "decision_required": "Obtain Legal review and approval before finalizing this change.",
+      "blocking_functions": [
+        "Legal"
+      ],
+      "priority": "high"
+    },
+    {
+      "escalation_id": "ESC-003",
+      "issue_id": "ISS-C4",
+      "reason": "The change in indemnification obligations limits StayLink's responsibilities significantly without mutual agreement, violating the requirement for such terms to be mutually accepted.",
+      "decision_required": "Ensure indemnification terms are reviewed and mutually agreed before implementation.",
+      "blocking_functions": [
+        "Legal"
+      ],
+      "priority": "critical"
+    }
+  ],
+  "agent_traces": [
+    {
+      "agent": "change_detection",
+      "version_processed": "v3",
+      "inputs_summary": "Compared v2 vs v3",
+      "outputs_summary": "Detected 4 changes: 4 material, 0 cosmetic",
+      "timestamp": "2026-04-05T05:46:07.726549+00:00"
+    },
+    {
+      "agent": "invalidation",
+      "version_processed": "v3",
+      "inputs_summary": "4 material changes checked against 3 sign-off(s)",
+      "outputs_summary": "3 sign-off(s) invalidated",
+      "timestamp": "2026-04-05T05:46:15.145236+00:00"
+    },
+    {
+      "agent": "routing",
+      "version_processed": "v3",
+      "inputs_summary": "4 material changes",
+      "outputs_summary": "Routed 4 changes: ['C1', 'C2', 'C3', 'C4']",
+      "timestamp": "2026-04-05T05:46:22.255180+00:00"
+    },
+    {
+      "agent": "policy_check",
+      "version_processed": "v3",
+      "inputs_summary": "4 material changes checked against 10 rules",
+      "outputs_summary": "3 violations, 0 near-misses across 3 changes",
+      "timestamp": "2026-04-05T05:46:29.456101+00:00"
+    },
+    {
+      "agent": "dependency_check",
+      "version_processed": "v3",
+      "inputs_summary": "4 material changes + 3 policy flags analysed",
+      "outputs_summary": "2 compound risk(s) identified: ['CR1', 'CR2']",
+      "timestamp": "2026-04-05T05:46:37.615201+00:00"
+    },
+    {
+      "agent": "decision_pack",
+      "version_processed": "v3",
+      "inputs_summary": "4 change(s), 3 policy flag(s), 2 compound risk(s), 3 sign-off(s)",
+      "outputs_summary": "Recommendation: ESCALATE. 4 critical issue(s). 0 function(s) REQUIRED.",
+      "timestamp": "2026-04-05T05:46:42.334111+00:00"
+    }
+  ],
+  "pipeline_metrics": [
+    {
+      "agent": "change_detection",
+      "wall_time_s": 23.39,
+      "input_tokens": 5281,
+      "output_tokens": 987,
+      "est_cost_usd": 0.000692
+    },
+    {
+      "agent": "invalidation",
+      "wall_time_s": 7.41,
+      "input_tokens": 1469,
+      "output_tokens": 271,
+      "est_cost_usd": 0.000191
+    },
+    {
+      "agent": "routing",
+      "wall_time_s": 7.1,
+      "input_tokens": 909,
+      "output_tokens": 261,
+      "est_cost_usd": 0.000146
+    },
+    {
+      "agent": "policy_check",
+      "wall_time_s": 7.19,
+      "input_tokens": 2976,
+      "output_tokens": 328,
+      "est_cost_usd": 0.000322
+    },
+    {
+      "agent": "dependency_check",
+      "wall_time_s": 8.15,
+      "input_tokens": 1657,
+      "output_tokens": 336,
+      "est_cost_usd": 0.000225
+    },
+    {
+      "agent": "decision_pack",
+      "wall_time_s": 4.72,
+      "input_tokens": 878,
+      "output_tokens": 82,
+      "est_cost_usd": 9e-05
+    }
+  ],
+  "decision_pack": {
+    "overall_recommendation": "ESCALATE",
+    "commercial_alignment_check": "NOT_AVAILABLE \u2014 requires pre-negotiation commercial charter as input. See DECISIONS.md.",
+    "summary_narrative": "The contract negotiation has reached a critical stage due to several invalidated sign-offs and significant changes to indemnification obligations that lack mutual agreement. The most pressing issue is the unilateral change in indemnification terms, which could substantially limit StayLink's responsibilities and expose us to heightened financial risks. Immediate action is required to re-review the invalidated sign-offs and ensure that the indemnification terms are mutually accepted before moving forward.",
+    "review_progress": {
+      "total_changes_detected": 4,
+      "changes_with_issues": 3,
+      "changes_clean": 1,
+      "functions_signed_off": 0,
+      "functions_pending": 0
+    },
+    "escalation_items": [
+      {
+        "type": "critical_policy_violation",
+        "change_id": "C4",
+        "clause": 10,
+        "summary": "The change in indemnification obligations limits StayLink's responsibilities significantly without mutual agreement, violating the requirement for such terms to be mutually accepted.",
+        "decision_needed": "Ensure indemnification terms are reviewed and mutually agreed before implementation."
+      },
+      {
+        "type": "invalidated_sign_off",
+        "change_id": "C1",
+        "clause": 4,
+        "summary": "Sign-off SO-001 by Finance was invalidated in v3",
+        "decision_needed": "Re-review required \u2014 prior approval no longer valid."
+      },
+      {
+        "type": "invalidated_sign_off",
+        "change_id": "C1",
+        "clause": 4,
+        "summary": "Sign-off SO-002 by Commercial was invalidated in v3",
+        "decision_needed": "Re-review required \u2014 prior approval no longer valid."
+      },
+      {
+        "type": "invalidated_sign_off",
+        "change_id": "C3",
+        "clause": 9,
+        "summary": "Sign-off SO-003 by Legal was invalidated in v3",
+        "decision_needed": "Re-review required \u2014 prior approval no longer valid."
+      }
+    ],
+    "required_sign_offs": {
+      "Commercial": "INVALIDATED",
+      "Finance": "INVALIDATED",
+      "Legal": "INVALIDATED"
+    },
+    "invalidated_sign_offs": [
+      {
+        "signoff_id": "SO-001",
+        "function": "Finance",
+        "issue_id": "ISS-001",
+        "approved": true,
+        "conditions": "Approved subject to:\n    (1) commission review mechanism remaining Nexus-initiated or mutually triggered \u2014\n    any shift to unilateral StayLink control  of commission reviews requires Finance re-review;\n    (2) SLA terms remaining at v2  levels;\n    (3) no new unilateral rights introduced affecting service continuity or commercial terms that\n    would alter the risk profile of the commission structure.",
+        "signed_off_in_version": "v2",
+        "invalidated": true,
+        "invalidated_by_change_id": "C1",
+        "invalidated_in_version": "v3",
+        "timestamp": "2026-04-04T17:52:58.658815+00:00"
+      },
+      {
+        "signoff_id": "SO-002",
+        "function": "Commercial",
+        "issue_id": "ISS-002",
+        "approved": true,
+        "conditions": "Approved subject to commission amendments remaining mutually agreed between both parties. Any shift to unilateral partner control of commission review timing, frequency, or methodology requires Commercial re-review.",
+        "signed_off_in_version": "v2",
+        "invalidated": true,
+        "invalidated_by_change_id": "C1",
+        "invalidated_in_version": "v3",
+        "timestamp": "2026-04-04T17:52:58.658872+00:00"
+      },
+      {
+        "signoff_id": "SO-003",
+        "function": "Legal",
+        "issue_id": "ISS-003",
+        "approved": true,
+        "conditions": "Approved subject to liability cap carve-out remaining limited to API security implementation failures only. Any expansion of carve-out scope to cover commercial performance, volume thresholds, or other non-security triggers requires Legal re-review.",
+        "signed_off_in_version": "v2",
+        "invalidated": true,
+        "invalidated_by_change_id": "C3",
+        "invalidated_in_version": "v3",
+        "timestamp": "2026-04-04T17:52:58.658888+00:00"
+      }
+    ],
+    "critical_issues": [
+      {
+        "change_id": "C4",
+        "clause": 10,
+        "description": "The change in indemnification obligations limits StayLink's responsibilities significantly without mutual agreement, violating the requirement for such terms to be mutually accepted.",
+        "policy_rule": "POL-004",
+        "severity": "critical",
+        "function": "Legal"
+      },
+      {
+        "change_id": "C1",
+        "clause": 4,
+        "description": "Sign-off SO-001 by Finance was invalidated in v3",
+        "policy_rule": null,
+        "severity": "critical",
+        "function": "Finance"
+      },
+      {
+        "change_id": "C1",
+        "clause": 4,
+        "description": "Sign-off SO-002 by Commercial was invalidated in v3",
+        "policy_rule": null,
+        "severity": "critical",
+        "function": "Commercial"
+      },
+      {
+        "change_id": "C3",
+        "clause": 9,
+        "description": "Sign-off SO-003 by Legal was invalidated in v3",
+        "policy_rule": null,
+        "severity": "critical",
+        "function": "Legal"
+      }
+    ],
+    "open_issues_count": {
+      "critical": 1,
+      "high": 2,
+      "medium": 0
+    },
+    "compound_risks": [
+      {
+        "risk_id": "CR1",
+        "change_ids": [
+          "C1",
+          "C2",
+          "C3"
+        ],
+        "description": "The combination introduces a risk where StayLink's unilateral control over commission rates and the introduction of a volume threshold for access suspension, coupled with the asymmetrical liability cap for booking volumes, creates a situation where Nexus faces heightened financial exposure without adequate recourse.",
+        "affected_functions": [
+          "Legal",
+          "Finance"
+        ],
+        "severity": "critical",
+        "reasoning": "C1 allows StayLink to control commission adjustments, C2 imposes a threshold that can lead to suspension of services, and C3 introduces asymmetrical liability linked to Nexus's booking performance \u2014 together, they trap Nexus in a position of financial vulnerability with limited negotiation leverage and increased risk exposure."
+      },
+      {
+        "risk_id": "CR2",
+        "change_ids": [
+          "C2",
+          "C3",
+          "C4"
+        ],
+        "description": "The combination creates a scenario where Nexus's inability to meet booking volume can lead to service suspension, heightening liability exposure due to asymmetrical limits, while also reducing indemnification protections for Nexus's actions, amplifying the consequence of volume inadequacies.",
+        "affected_functions": [
+          "Legal",
+          "Commercial",
+          "Finance"
+        ],
+        "severity": "high",
+        "reasoning": "C2 introduces the risk of service suspension based on performance, C3 elevates liability exposure regarding bookings, and C4 limits StayLink's indemnification responsibilities \u2014 this trio creates a precarious situation for Nexus where operational shortcomings could lead to significant financial and legal repercussions with reduced protection."
+      }
+    ],
+    "pipeline_metrics": [
+      {
+        "agent": "change_detection",
+        "wall_time_s": 23.39,
+        "input_tokens": 5281,
+        "output_tokens": 987,
+        "est_cost_usd": 0.000692
+      },
+      {
+        "agent": "invalidation",
+        "wall_time_s": 7.41,
+        "input_tokens": 1469,
+        "output_tokens": 271,
+        "est_cost_usd": 0.000191
+      },
+      {
+        "agent": "routing",
+        "wall_time_s": 7.1,
+        "input_tokens": 909,
+        "output_tokens": 261,
+        "est_cost_usd": 0.000146
+      },
+      {
+        "agent": "policy_check",
+        "wall_time_s": 7.19,
+        "input_tokens": 2976,
+        "output_tokens": 328,
+        "est_cost_usd": 0.000322
+      },
+      {
+        "agent": "dependency_check",
+        "wall_time_s": 8.15,
+        "input_tokens": 1657,
+        "output_tokens": 336,
+        "est_cost_usd": 0.000225
+      },
+      {
+        "agent": "decision_pack",
+        "wall_time_s": 4.72,
+        "input_tokens": 878,
+        "output_tokens": 82,
+        "est_cost_usd": 9e-05
+      }
+    ]
+  },
+  "run_id": "run_001",
+  "run_timestamp": "2026-04-05T05:45:44.313055+00:00",
+  "pipeline_status": "decision_pack_ready",
+  "prior_round": {
+    "version": "v2",
+    "sign_offs_recorded": [
+      {
+        "signoff_id": "SO-001",
+        "function": "Finance",
+        "conditions_summary": "Approved subject to:\n    (1) commission review mechanism remaining Nexus-initiated or mutually triggered \u2014\n    any shift to unilateral StayLink control  of commission reviews requires Finance re-revie",
+        "signed_off_in_version": "v2"
+      },
+      {
+        "signoff_id": "SO-002",
+        "function": "Commercial",
+        "conditions_summary": "Approved subject to commission amendments remaining mutually agreed between both parties. Any shift to unilateral partner control of commission review timing, frequency, or methodology requires Commer",
+        "signed_off_in_version": "v2"
+      },
+      {
+        "signoff_id": "SO-003",
+        "function": "Legal",
+        "conditions_summary": "Approved subject to liability cap carve-out remaining limited to API security implementation failures only. Any expansion of carve-out scope to cover commercial performance, volume thresholds, or othe",
+        "signed_off_in_version": "v2"
+      }
+    ],
+    "recommendation": "NEGOTIATE",
+    "changes_detected_in_v2": 13,
+    "functions_required_in_v2": 5
+  }
+}

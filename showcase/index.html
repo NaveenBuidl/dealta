@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DEALta — Contract Review Orchestrator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary:     #FAFAFA;
+      --bg-card:        #FFFFFF;
+      --bg-section-alt: #F5F5F0;
+      --text-primary:   #1A1A1A;
+      --text-secondary: #555555;
+      --text-muted:     #999999;
+      --border:         #E5E5E5;
+      --accent-red:     #DC2626;
+      --accent-amber:   #D97706;
+      --accent-green:   #16A34A;
+      --accent-blue:    #2563EB;
+      --accent-slate:   #64748B;
+      --nav-bg:         #FFFFFF;
+      --nav-border:     #E5E5E5;
+      /* utilities */
+      --mono:       'JetBrains Mono', monospace;
+      --sans:       'DM Sans', sans-serif;
+      --radius:     8px;
+      --radius-lg:  12px;
+      --transition: 0.2s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    /* Layout */
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    section { padding: 72px 0; border-bottom: 1px solid var(--border); }
+    section:last-child { border-bottom: none; }
+    .section-alt { background: var(--bg-section-alt); }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .section-sub {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 36px;
+    }
+
+    /* Scroll animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Badges — colored backgrounds with white text */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #FFFFFF;
+    }
+    .badge-critical { background: var(--accent-red); }
+    .badge-high     { background: var(--accent-amber); }
+    .badge-medium   { background: var(--accent-amber); }
+    .badge-material { background: var(--accent-blue); }
+    .badge-ok       { background: var(--accent-green); }
+    .badge-inv      { background: var(--accent-red); }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+    }
+
+    .card + .card { margin-top: 12px; }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .card-id {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      white-space: nowrap;
+      padding-top: 2px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .card-body { color: var(--text-secondary); font-size: 14px; }
+
+    .diff-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .diff-box {
+      background: var(--bg-section-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+    }
+
+    .diff-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .diff-text { font-size: 13px; color: var(--text-primary); }
+
+    /* Expand/Collapse */
+    .expand-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-family: var(--sans);
+      font-size: 12px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: border-color var(--transition), color var(--transition);
+    }
+    .expand-btn:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+    .expand-content {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      background: var(--bg-section-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+      line-height: 1.65;
+    }
+    .expand-content.open { display: block; }
+
+    .chevron { display: inline-block; transition: transform var(--transition); }
+    .expand-btn.open .chevron { transform: rotate(180deg); }
+
+    /* Hero */
+    #hero {
+      padding: 96px 0 72px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 { font-size: 48px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+    .hero-subtitle { font-size: 24px; font-weight: 400; color: var(--text-secondary); margin-bottom: 16px; max-width: 600px; }
+    .hero-description { font-size: 16px; color: var(--text-muted); max-width: 600px; }
+
+    .proof-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+    .chip { background: var(--bg-section-alt); border: 1px solid var(--border); color: var(--text-secondary); padding: 4px 12px; border-radius: 20px; font-size: 13px; letter-spacing: 0.02em; }
+
+    .hero-ctas { display: flex; gap: 24px; margin-top: 24px; }
+    .hero-ctas a { color: var(--accent-blue); text-decoration: none; font-size: 15px; }
+    .hero-ctas a:hover { text-decoration: underline; }
+    .hero-origin { font-size: 14px; font-style: italic; color: var(--text-muted); margin-top: 16px; }
+
+    /* Scenario section */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+    .scenario-col-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .scenario-text {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .scenario-thesis {
+      font-size: 15px;
+      font-style: italic;
+      color: var(--text-muted);
+      text-align: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+    }
+    @media (max-width: 768px) {
+      .scenario-grid { grid-template-columns: 1fr; gap: 24px; }
+    }
+
+    /* Verdict banner */
+    .verdict-banner {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--accent-red);
+      border-radius: var(--radius-lg);
+      padding: 14px 24px;
+      margin: 28px 0 40px;
+      color: #FFFFFF;
+    }
+
+    .verdict-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+    }
+
+    .verdict-value {
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 500;
+      color: #FFFFFF;
+      letter-spacing: .06em;
+    }
+
+    .verdict-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: .5; transform: scale(.75); }
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+    }
+
+    .stat-value {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label { font-size: 13px; color: var(--text-muted); }
+
+    .hero-narrative {
+      max-width: 680px;
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+      border-left: 3px solid var(--border);
+      padding-left: 18px;
+    }
+
+    /* Pipeline timeline */
+    .timeline { position: relative; padding-left: 28px; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 6px;
+      bottom: 6px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -24px;
+      top: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 2px solid var(--bg-primary);
+    }
+
+    .timeline-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-agent {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .timeline-time {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .timeline-output { font-size: 13px; color: var(--text-secondary); }
+
+    /* Policy violations */
+    .policy-card {
+      border-left: 3px solid;
+      padding-left: 18px;
+      margin-bottom: 24px;
+    }
+    .policy-card.critical { border-color: var(--accent-red); }
+    .policy-card.high     { border-color: var(--accent-amber); }
+    .policy-card.medium   { border-color: var(--accent-amber); }
+
+    .policy-rule {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .policy-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .policy-explanation { font-size: 14px; color: var(--text-secondary); }
+
+    .policy-action {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--bg-section-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+    }
+
+    /* Sign-off status grid */
+    .signoff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .signoff-tile {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+    }
+
+    .signoff-fn {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .signoff-status {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+    .status-invalidated { color: var(--accent-red); }
+    .status-required    { color: var(--accent-amber); }
+    .status-ok          { color: var(--accent-green); }
+
+    /* Metrics table */
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .metrics-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .metrics-table td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .metrics-table tr:last-child td { border-bottom: none; }
+    .metrics-table tbody tr:hover td { background: var(--bg-section-alt); }
+    .metrics-table td.mono { font-family: var(--mono); }
+
+    .metrics-total td {
+      font-family: var(--mono);
+      font-weight: 600;
+      border-top: 2px solid var(--border);
+      color: var(--accent-blue);
+    }
+
+    /* Prior round comparison */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .compare-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+    }
+
+    .compare-version {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .compare-verdict {
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    .verdict-negotiate { color: var(--accent-amber); }
+    .verdict-escalate  { color: var(--accent-red); }
+
+    .compare-stat { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+    .compare-stat .label { color: var(--text-muted); }
+    .compare-stat .val   { font-family: var(--mono); font-weight: 500; }
+
+    /* Escalation */
+    .esc-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-bottom: 12px;
+    }
+
+    .esc-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .esc-id {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .esc-type {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .esc-summary { font-size: 14px; color: var(--text-primary); }
+
+    /* Compound risk */
+    .risk-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+
+    .risk-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .risk-id {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-blue);
+    }
+
+    .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+    .change-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      background: rgba(37,99,235,.08);
+      color: var(--accent-blue);
+      border: 1px solid rgba(37,99,235,.2);
+      border-radius: 4px;
+      padding: 2px 8px;
+    }
+
+    .fn-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      background: rgba(100,116,139,.08);
+      color: var(--accent-slate);
+      border: 1px solid rgba(100,116,139,.2);
+      border-radius: 4px;
+      padding: 2px 8px;
+    }
+
+    .risk-description { font-size: 14px; color: var(--text-secondary); margin-top: 10px; }
+
+    /* Architecture section */
+    .arch-strip { display: flex; align-items: flex-start; gap: 8px; margin: 40px 0 24px; flex-wrap: wrap; }
+    .arch-box { border: 1px solid var(--border); border-radius: 6px; padding: 12px 16px; display: flex; flex-direction: column; align-items: center; min-width: 110px; background: var(--bg-card); }
+    .arch-name { font-family: var(--mono); font-size: 12px; color: var(--text-primary); text-align: center; }
+    .arch-cap { font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: center; }
+    .arch-arrow { color: var(--text-muted); font-size: 18px; margin-top: 16px; }
+    .arch-philosophy { font-size: 14px; color: var(--text-muted); text-align: center; }
+
+    /* Evals section */
+    .evals-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 32px; }
+    .evals-col h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; }
+    .eval-table { width: 100%; border-collapse: collapse; }
+    .eval-table td { padding: 8px 0; font-size: 14px; color: var(--text-secondary); border-bottom: 1px solid var(--border); }
+    .eval-score { text-align: right; font-family: var(--mono); font-size: 13px; }
+    .eval-score.pass { color: var(--accent-green); }
+    .eval-note { font-size: 13px; color: var(--text-muted); margin-top: 12px; font-style: italic; }
+    .obs-img-primary { width: 100%; border: 1px solid var(--border); border-radius: 4px; display: block; }
+    .obs-thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .obs-img-thumb { width: 100%; border: 1px solid var(--border); border-radius: 4px; display: block; }
+    .img-caption { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+    .evals-economics { text-align: center; font-size: 14px; color: var(--text-muted); margin-top: 32px; font-family: var(--mono); }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--nav-border);
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+    }
+
+    .nav-brand {
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .nav-brand span { color: var(--accent-blue); }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .arch-strip { flex-direction: column; align-items: center; }
+      .arch-arrow { transform: rotate(90deg); }
+      .evals-grid { grid-template-columns: 1fr; }
+      .obs-thumbs { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .diff-row { grid-template-columns: 1fr; }
+      .compare-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-brand">DEAL<span>ta</span></div>
+    <ul class="nav-links">
+      <li><a href="#changes">Changes</a></li>
+      <li><a href="#sign-offs">Sign-offs</a></li>
+      <li><a href="#policy">Policy</a></li>
+      <li><a href="#risks">Risks</a></li>
+      <li><a href="#escalation">Escalation</a></li>
+      <li><a href="#metrics">Metrics</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- S1: Hero -->
+<section id="hero">
+  <div class="container">
+    <h1>DEALta</h1>
+    <p class="hero-subtitle">Stateful Review Orchestration for Multi-Team Workflows</p>
+    <p class="hero-description">Detects what changed in a document, routes review tasks to the right teams, and tracks which prior approvals are no longer safe to trust after later revisions.</p>
+
+    <div class="proof-chips">
+      <span class="chip">Stateful Across Rounds</span>
+      <span class="chip">Multi-Agent Orchestration</span>
+      <span class="chip">Eval-First</span>
+      <span class="chip">Langfuse Traced</span>
+    </div>
+
+    <div class="hero-ctas">
+      <a href="#changes">See Walkthrough ↓</a>
+      <a href="https://github.com/NaveenBuidl/dealta" target="_blank">GitHub →</a>
+      <a href="#" target="_blank">Demo Video →</a>
+    </div>
+    <p class="hero-origin">Built from experience coordinating a supplier agreement across Legal, Finance, Commercial, Product/Tech, and Customer Support.</p>
+
+    <div class="verdict-banner">
+      <div class="verdict-dot"></div>
+      <div class="verdict-label">Recommendation</div>
+      <div class="verdict-value" id="verdict">—</div>
+    </div>
+
+    <div class="hero-stats" id="hero-stats"></div>
+    <div class="hero-narrative" id="hero-narrative"></div>
+  </div>
+</section>
+
+<!-- S1b: The Scenario -->
+<section id="scenario">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">THE SCENARIO</p>
+      <h2>A supplier agreement under renegotiation</h2>
+      <p class="section-sub">Three rounds of review. Five functions involved. Here's what changed in the final round — and why it matters.</p>
+      <div class="scenario-grid">
+        <div class="scenario-col">
+          <p class="scenario-col-label">The deal</p>
+          <p class="scenario-text">Nexus, a travel platform, is finalising a supplier agreement with StayLink, an accommodation provider. The agreement governs commission structure, payment terms, liability, and content obligations.</p>
+          <p class="scenario-text">In v2, five business functions reviewed the agreement. Legal, Finance, and Commercial each granted conditional approval — with specific terms that had to hold for their sign-off to remain valid.</p>
+          <p class="scenario-text">v3 arrived. Four clauses changed. Three of those conditions were broken.</p>
+        </div>
+        <div class="scenario-col">
+          <p class="scenario-col-label">Why it's hard</p>
+          <p class="scenario-text">Finance approved commission terms assuming mutual control over review timing. v3 shifted that control unilaterally to StayLink.</p>
+          <p class="scenario-text">Legal approved liability terms assuming a symmetric cap. v3 introduced an asymmetry tied to booking volumes.</p>
+          <p class="scenario-text">No single reviewer had visibility across all three broken approvals at once. DEALta detects the breaks, routes them to the right functions, and escalates before anyone proceeds.</p>
+        </div>
+      </div>
+      <p class="scenario-thesis">This is the coordination problem DEALta is designed to solve.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S2: Pipeline trace -->
+<section id="pipeline">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 02</div>
+      <h2>Orchestration trace</h2>
+      <p class="section-sub">Six specialised agents, orchestrated via LangGraph. Each writes to shared typed state — decisions accumulate, nothing passes outside the graph.</p>
+    </div>
+    <div class="timeline fade-in" id="pipeline-timeline"></div>
+  </div>
+</section>
+
+<!-- S3: Detected changes -->
+<section id="changes" class="section-alt">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 03</div>
+      <h2>Detected changes</h2>
+      <p class="section-sub" id="changes-sub"></p>
+    </div>
+    <div id="changes-list"></div>
+  </div>
+</section>
+
+<!-- S4: Invalidated approvals -->
+<section id="sign-offs">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 04</div>
+      <h2>Invalidated approvals</h2>
+      <p class="section-sub">Sign-offs granted in v2. Re-evaluated against v3 changes — all three breached their stated conditions.</p>
+    </div>
+    <div id="signoffs-list"></div>
+  </div>
+</section>
+
+<!-- S5: Policy violations -->
+<section id="policy" class="section-alt">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 05</div>
+      <h2>Policy violations</h2>
+      <p class="section-sub" id="policy-sub"></p>
+    </div>
+    <div id="policy-list"></div>
+  </div>
+</section>
+
+<!-- S6: Compound risks -->
+<section id="risks">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 06</div>
+      <h2>Compound risks</h2>
+      <p class="section-sub">Risks that no single change creates alone — only visible when changes are analysed in combination.</p>
+    </div>
+    <div id="risks-list"></div>
+  </div>
+</section>
+
+<!-- S7: Escalation queue -->
+<section id="escalation" class="section-alt">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 07</div>
+      <h2>Escalation queue</h2>
+      <p class="section-sub">Items that require a human decision before the contract can proceed.</p>
+    </div>
+    <div id="escalation-list"></div>
+  </div>
+</section>
+
+<!-- S8: Required sign-off status -->
+<section id="signoff-status">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 08</div>
+      <h2>Required sign-off status</h2>
+      <p class="section-sub">Current approval gate status across business functions.</p>
+    </div>
+    <div class="signoff-grid fade-in" id="signoff-status-grid"></div>
+  </div>
+</section>
+
+<!-- S9: Architecture -->
+<section id="architecture" class="section-alt">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">SECTION 09</p>
+      <h2>How the system works</h2>
+      <p class="section-sub">Contract v(n-1) + v(n) + Prior Approvals → 6 agents → escalation-ready decision pack</p>
+      <div class="arch-strip">
+        <div class="arch-box"><span class="arch-name">Change Detection</span><span class="arch-cap">detects clause deltas</span></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box"><span class="arch-name">Invalidation</span><span class="arch-cap">checks stale approvals</span></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box"><span class="arch-name">Routing</span><span class="arch-cap">routes team review</span></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box"><span class="arch-name">Policy Check</span><span class="arch-cap">checks policy rules</span></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box"><span class="arch-name">Dependency</span><span class="arch-cap">finds cross-clause risk</span></div>
+        <span class="arch-arrow">→</span>
+        <div class="arch-box"><span class="arch-name">Decision Pack</span><span class="arch-cap">assembles recommendation</span></div>
+      </div>
+      <p class="arch-philosophy"><em>Deterministic recommendation logic. LLM writes one paragraph. Everything structural is Python.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- S10: Evals + Observability -->
+<section id="evals">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">SECTION 10</p>
+      <h2>Evaluation + Observability</h2>
+      <p class="section-sub">Ground truth written before agents, not after.</p>
+      <div class="evals-grid">
+        <div class="evals-col">
+          <h3>Evaluation</h3>
+          <table class="eval-table">
+            <tr><td>Stateful invalidation</td><td class="eval-score pass">13/13</td></tr>
+            <tr><td>Change detection</td><td class="eval-score pass">100%</td></tr>
+            <tr><td>Routing accuracy</td><td class="eval-score pass">89%</td></tr>
+            <tr><td>Policy compliance</td><td class="eval-score pass">100%</td></tr>
+            <tr><td>Compound risk detection</td><td class="eval-score pass">2/2</td></tr>
+            <tr><td>Decision pack structure</td><td class="eval-score pass">6/6</td></tr>
+            <tr><td>Narrative faithfulness</td><td class="eval-score pass">PASS (LLM-as-judge)</td></tr>
+          </table>
+          <p class="eval-note">Ground truth written before agents, not after.</p>
+        </div>
+        <div class="evals-col">
+          <h3>Observability</h3>
+          <a href="./images/langfuse_waterfall.png" target="_blank">
+            <img src="./images/langfuse_waterfall.png" alt="Langfuse pipeline waterfall" class="obs-img-primary" />
+          </a>
+          <p class="img-caption">6 agent spans with per-step cost, latency, and I/O visibility</p>
+          <div class="obs-thumbs">
+            <div>
+              <a href="./images/langfuse_audit.png" target="_blank">
+                <img src="./images/langfuse_audit.png" alt="Pipeline audit record" class="obs-img-thumb" />
+              </a>
+              <p class="img-caption">Pipeline audit: inputs, outputs, metadata</p>
+            </div>
+            <div>
+              <a href="./images/langfuse_agent.png" target="_blank">
+                <img src="./images/langfuse_agent.png" alt="Agent-level detail" class="obs-img-thumb" />
+              </a>
+              <p class="img-caption">Agent detail: prompt, response, tokens</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="evals-economics">$0.0017/run · 58s total · 6 traced spans · gpt-4o-mini as eval judge</p>
+    </div>
+  </div>
+</section>
+
+<!-- S11: Version comparison -->
+<section id="prior" class="section-alt">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 11</div>
+      <h2>Version comparison</h2>
+      <p class="section-sub">What changed between the v2 review round and this v3 escalation.</p>
+    </div>
+    <div class="compare-grid fade-in" id="compare-grid"></div>
+  </div>
+</section>
+
+<!-- S12: Performance metrics -->
+<section id="metrics">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-label">Section 12</div>
+      <h2>Performance metrics</h2>
+      <p class="section-sub">Token usage, latency, and estimated cost per agent. Full run on gpt-4o-mini.</p>
+    </div>
+    <div class="card fade-in">
+      <table class="metrics-table">
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Time (s)</th>
+            <th>Input tok</th>
+            <th>Output tok</th>
+            <th>Est. cost</th>
+          </tr>
+        </thead>
+        <tbody id="metrics-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    DEALta &mdash; Contract Review Orchestrator &nbsp;&middot;&nbsp;
+    Multi-agent orchestration with LangGraph + GPT-4o-mini &nbsp;&middot;&nbsp;
+    nexus_staylink_001 &nbsp; v2 &rarr; <strong>v3</strong>
+  </div>
+</footer>
+
+<script>
+  function el(tag, cls, html) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  function badge(text, type) {
+    return '<span class="badge badge-' + type + '">' + text + '</span>';
+  }
+
+  function sevClass(sev) {
+    return { critical: 'critical', high: 'high', medium: 'medium' }[sev] || 'high';
+  }
+
+  function toggleExpand(btn, contentId) {
+    var content = document.getElementById(contentId);
+    var isOpen = content.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.querySelector('.btn-label').textContent = isOpen ? 'Hide' : 'Show detail';
+  }
+
+  function expandBtn(id, label) {
+    return '<button class="expand-btn" onclick="toggleExpand(this,\'' + id + '\')">'
+      + '<svg class="chevron" width="12" height="12" viewBox="0 0 12 12" fill="none">'
+      + '<path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+      + '</svg><span class="btn-label">' + (label || 'Show detail') + '</span></button>';
+  }
+
+  function renderHero(data) {
+    document.getElementById('verdict').textContent = data.decision_pack.overall_recommendation;
+
+    var stats = [
+      { value: data.detected_changes.length,                              label: 'Changes detected' },
+      { value: data.sign_offs.filter(function(s){ return s.invalidated; }).length, label: 'Sign-offs invalidated' },
+      { value: data.compound_risks.length,                                label: 'Compound risks' },
+      { value: data.policy_flags.length,                                  label: 'Policy violations' },
+    ];
+
+    var statsEl = document.getElementById('hero-stats');
+    stats.forEach(function(s) {
+      var d = el('div', 'stat-card');
+      d.innerHTML = '<div class="stat-value">' + s.value + '</div><div class="stat-label">' + s.label + '</div>';
+      statsEl.appendChild(d);
+    });
+
+    document.getElementById('hero-narrative').textContent = data.decision_pack.summary_narrative;
+  }
+
+  function renderTimeline(data) {
+    var tl = document.getElementById('pipeline-timeline');
+    var metrics = {};
+    data.pipeline_metrics.forEach(function(m) { metrics[m.agent] = m; });
+
+    data.agent_traces.forEach(function(trace) {
+      var m = metrics[trace.agent] || {};
+      var item = el('div', 'timeline-item fade-in');
+      item.innerHTML =
+        '<div class="timeline-header">'
+        + '<span class="timeline-agent">' + trace.agent.replace('_', ' ') + '</span>'
+        + (m.wall_time_s ? '<span class="timeline-time">' + m.wall_time_s + 's</span>' : '')
+        + '</div>'
+        + '<div class="timeline-output">' + trace.outputs_summary + '</div>';
+      tl.appendChild(item);
+    });
+  }
+
+  function renderChanges(data) {
+    var list = document.getElementById('changes-list');
+    document.getElementById('changes-sub').textContent =
+      data.detected_changes.length + ' material changes detected in v3. Each independently routed to a business function.';
+
+    data.detected_changes.forEach(function(c) {
+      var card = el('div', 'card fade-in');
+      var id = 'rea-' + c.change_id;
+      card.innerHTML =
+        '<div class="card-header">'
+        + '<span class="card-id">' + c.change_id + ' &middot; Clause ' + c.clause_number + '</span>'
+        + '<span class="card-title">' + c.clause_title + '</span>'
+        + badge(c.materiality_level, sevClass(c.materiality_level))
+        + '</div>'
+        + '<div class="diff-row">'
+        + '<div class="diff-box"><div class="diff-label">v2</div><div class="diff-text">' + c.v_prev_summary + '</div></div>'
+        + '<div class="diff-box"><div class="diff-label">v3</div><div class="diff-text">' + c.v_curr_summary + '</div></div>'
+        + '</div>'
+        + expandBtn(id, 'Detection reasoning')
+        + '<div class="expand-content" id="' + id + '">' + c.detection_reasoning + '</div>';
+      list.appendChild(card);
+    });
+  }
+
+  function renderSignoffs(data) {
+    var list = document.getElementById('signoffs-list');
+    data.sign_offs.forEach(function(s) {
+      var card = el('div', 'card fade-in');
+      var id = 'cond-' + s.signoff_id;
+      card.innerHTML =
+        '<div class="card-header">'
+        + '<span class="card-id">' + s.signoff_id + '</span>'
+        + '<span class="card-title">' + s.function + ' &mdash; signed in ' + s.signed_off_in_version + '</span>'
+        + badge('INVALIDATED in ' + s.invalidated_in_version, 'inv')
+        + '</div>'
+        + '<div class="card-body">Invalidated by change <strong>' + s.invalidated_by_change_id + '</strong></div>'
+        + expandBtn(id, 'Approval conditions')
+        + '<div class="expand-content" id="' + id + '">' + s.conditions + '</div>';
+      list.appendChild(card);
+    });
+  }
+
+  function renderPolicy(data) {
+    var list = document.getElementById('policy-list');
+    var counts = {};
+    data.policy_flags.forEach(function(f) { counts[f.severity] = (counts[f.severity] || 0) + 1; });
+    var parts = Object.keys(counts).map(function(k){ return counts[k] + ' ' + k; }).join(', ');
+    document.getElementById('policy-sub').textContent =
+      data.policy_flags.length + ' violations: ' + parts + '. Checked against policy/rules.json.';
+
+    data.policy_flags.forEach(function(f) {
+      var div = el('div', 'policy-card ' + sevClass(f.severity) + ' fade-in');
+      div.innerHTML =
+        '<div class="policy-rule">' + f.rule_id + ' &middot; ' + f.flag_type.toUpperCase() + ' &middot; Change ' + f.change_id + '</div>'
+        + '<div class="policy-name">' + badge(f.severity, sevClass(f.severity)) + f.rule_name + '</div>'
+        + '<div class="policy-explanation">' + f.explanation + '</div>'
+        + '<div class="policy-action">Action: ' + f.recommended_action + '</div>';
+      list.appendChild(div);
+    });
+  }
+
+  function renderRisks(data) {
+    var list = document.getElementById('risks-list');
+    data.compound_risks.forEach(function(r) {
+      var card = el('div', 'risk-card fade-in');
+      var id = 'rs-' + r.risk_id;
+      card.innerHTML =
+        '<div class="risk-header">'
+        + '<div><div class="risk-id">' + r.risk_id + '</div>'
+        + '<div class="tag-row">' + r.change_ids.map(function(c){ return '<span class="change-tag">' + c + '</span>'; }).join('') + '</div></div>'
+        + badge(r.severity, sevClass(r.severity))
+        + '</div>'
+        + '<div class="risk-description">' + r.description + '</div>'
+        + '<div class="tag-row" style="margin-top:12px">'
+        + r.affected_functions.map(function(fn){ return '<span class="fn-tag">' + fn + '</span>'; }).join('')
+        + '</div>'
+        + expandBtn(id, 'Reasoning')
+        + '<div class="expand-content" id="' + id + '">' + r.reasoning + '</div>';
+      list.appendChild(card);
+    });
+  }
+
+  function renderEscalation(data) {
+    var list = document.getElementById('escalation-list');
+    data.decision_pack.escalation_items.forEach(function(item, i) {
+      var card = el('div', 'esc-card fade-in');
+      var id = 'dec-' + i;
+      var isCritical = item.type === 'critical_policy_violation';
+      var typeLabel = item.type.replace(/_/g, ' ');
+      card.innerHTML =
+        '<div class="esc-meta">'
+        + '<span class="esc-id">Change ' + item.change_id + ' &middot; Clause ' + item.clause + '</span>'
+        + '<span class="esc-type">' + typeLabel + '</span>'
+        + badge(isCritical ? 'critical' : 'high', isCritical ? 'critical' : 'high')
+        + '</div>'
+        + '<div class="esc-summary">' + item.summary + '</div>'
+        + expandBtn(id, 'Decision required')
+        + '<div class="expand-content" id="' + id + '">' + item.decision_needed + '</div>';
+      list.appendChild(card);
+    });
+  }
+
+  function renderSignoffStatus(data) {
+    var grid = document.getElementById('signoff-status-grid');
+    var required = data.decision_pack.required_sign_offs;
+    Object.keys(required).forEach(function(fn) {
+      var status = required[fn];
+      var tile = el('div', 'signoff-tile');
+      var cls = status === 'INVALIDATED' ? 'status-invalidated'
+              : status === 'REQUIRED'    ? 'status-required'
+              : 'status-ok';
+      tile.innerHTML = '<div class="signoff-fn">' + fn + '</div>'
+        + '<div class="signoff-status ' + cls + '">' + status + '</div>';
+      grid.appendChild(tile);
+    });
+  }
+
+  function renderPrior(data) {
+    var grid = document.getElementById('compare-grid');
+    var pr = data.prior_round;
+
+    var v2 = el('div', 'compare-box');
+    v2.innerHTML =
+      '<div class="compare-version">Round &mdash; v2</div>'
+      + '<div class="compare-verdict verdict-negotiate">' + pr.recommendation + '</div>'
+      + '<div class="compare-stat"><span class="label">Changes detected</span><span class="val">' + pr.changes_detected_in_v2 + '</span></div>'
+      + '<div class="compare-stat"><span class="label">Functions required</span><span class="val">' + pr.functions_required_in_v2 + '</span></div>'
+      + '<div class="compare-stat"><span class="label">Sign-offs recorded</span><span class="val">' + pr.sign_offs_recorded.length + '</span></div>';
+
+    var invalidated = data.sign_offs.filter(function(s){ return s.invalidated; }).length;
+    var v3 = el('div', 'compare-box');
+    v3.innerHTML =
+      '<div class="compare-version">Round &mdash; v3</div>'
+      + '<div class="compare-verdict verdict-escalate">' + data.decision_pack.overall_recommendation + '</div>'
+      + '<div class="compare-stat"><span class="label">Changes detected</span><span class="val">' + data.detected_changes.length + '</span></div>'
+      + '<div class="compare-stat"><span class="label">Policy violations</span><span class="val">' + data.policy_flags.length + '</span></div>'
+      + '<div class="compare-stat"><span class="label">Sign-offs invalidated</span><span class="val">' + invalidated + '</span></div>'
+      + '<div class="compare-stat"><span class="label">Compound risks</span><span class="val">' + data.compound_risks.length + '</span></div>';
+
+    grid.appendChild(v2);
+    grid.appendChild(v3);
+  }
+
+  function renderMetrics(data) {
+    var tbody = document.getElementById('metrics-body');
+    var totalTime = 0, totalIn = 0, totalOut = 0, totalCost = 0;
+
+    data.pipeline_metrics.forEach(function(m) {
+      totalTime += m.wall_time_s;
+      totalIn   += m.input_tokens;
+      totalOut  += m.output_tokens;
+      totalCost += m.est_cost_usd;
+
+      var tr = el('tr');
+      tr.innerHTML =
+        '<td>' + m.agent.replace('_', ' ') + '</td>'
+        + '<td class="mono">' + m.wall_time_s + '</td>'
+        + '<td class="mono">' + m.input_tokens.toLocaleString() + '</td>'
+        + '<td class="mono">' + m.output_tokens.toLocaleString() + '</td>'
+        + '<td class="mono">$' + m.est_cost_usd.toFixed(6) + '</td>';
+      tbody.appendChild(tr);
+    });
+
+    var totalRow = el('tr', 'metrics-total');
+    totalRow.innerHTML =
+      '<td>TOTAL</td>'
+      + '<td>' + totalTime.toFixed(2) + 's</td>'
+      + '<td>' + totalIn.toLocaleString() + '</td>'
+      + '<td>' + totalOut.toLocaleString() + '</td>'
+      + '<td>$' + totalCost.toFixed(6) + '</td>';
+    tbody.appendChild(totalRow);
+  }
+
+  function initObserver() {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-in').forEach(function(el) { obs.observe(el); });
+  }
+
+  fetch('./showcase_data.json')
+    .then(function(r) {
+      if (!r.ok) throw new Error('Failed to load showcase_data.json — serve over HTTP');
+      return r.json();
+    })
+    .then(function(data) {
+      renderHero(data);
+      renderTimeline(data);
+      renderChanges(data);
+      renderSignoffs(data);
+      renderPolicy(data);
+      renderRisks(data);
+      renderEscalation(data);
+      renderSignoffStatus(data);
+      renderPrior(data);
+      renderMetrics(data);
+
+      document.querySelectorAll('#hero .fade-in').forEach(function(e) { e.classList.add('visible'); });
+      initObserver();
+    })
+    .catch(function(err) {
+      document.body.innerHTML =
+        '<div style="padding:60px;font-family:monospace;color:#DC2626">'
+        + 'Error: ' + err.message + '<br/><br/>'
+        + 'Serve with: <code>python -m http.server 8080</code><br/>'
+        + 'Then open: <a href="http://localhost:8080/showcase/" style="color:#2563EB">http://localhost:8080/showcase/</a>'
+        + '</div>';
+    });
+</script>
+</body>
+</html>

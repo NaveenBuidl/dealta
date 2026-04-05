@@ -21,10 +21,11 @@ langfuse = Langfuse(
     host=os.environ.get("LANGFUSE_BASE_URL", "https://cloud.langfuse.com"),
 )
 
-current_trace_id = None  # set by run.py before graph.invoke(); shared across all agent calls
+current_trace_id = None   # set by run.py before graph.invoke(); shared across all agent calls
+current_trace = None      # root span object; set by run.py for post-pipeline .update()
 
-PROVIDER = "gemini"
-# PROVIDER = "openai"  # PAID!
+# PROVIDER = "gemini"
+PROVIDER = "openai"  # PAID!
 
 # Gemini fallback chain — tried in order until one has quota
 GEMINI_MODELS_FALLBACK = [
@@ -51,16 +52,23 @@ def generate_with_fallback(prompt: str, agent_name: str = "unknown") -> tuple[st
     span = langfuse.start_observation(
         trace_context=TraceContext(trace_id=trace_id),
         name=agent_name,
-        as_type="span",
+        as_type="generation",
     )
     result = _gemini(prompt) if PROVIDER == "gemini" else _openai(prompt)
-    text, i, o = result
-    span.update(usage_details={"input": i or 0, "output": o or 0})
+    text, i, o, model_name = result
+    cost = round((i / 1000) * 0.000075 + (o / 1000) * 0.0003, 6) if i is not None and o is not None else None
+    span.update(
+        input={"agent": agent_name, "prompt_chars": len(prompt)},
+        output={"response_preview": text[:500], "response_chars": len(text)},
+        usage_details={"input": i or 0, "output": o or 0},
+        model=model_name,
+        **({"cost_details": {"total": cost}} if cost is not None else {}),
+    )
     span.end()
     return text, i, o
 
 
-def _gemini(prompt: str) -> tuple[str, int | None, int | None]:
+def _gemini(prompt: str) -> tuple[str, int | None, int | None, str]:
     from google import genai
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     for model in GEMINI_MODELS_FALLBACK:
@@ -76,7 +84,7 @@ def _gemini(prompt: str) -> tuple[str, int | None, int | None]:
                 o = response.usage_metadata.candidates_token_count
             except Exception:
                 i, o = None, None
-            return text, i, o
+            return text, i, o, model
         except Exception as e:
             if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
                 print(f"[config] gemini/{model} quota exhausted, trying next...")
@@ -85,7 +93,7 @@ def _gemini(prompt: str) -> tuple[str, int | None, int | None]:
     raise RuntimeError("All Gemini models exhausted — switch PROVIDER to openai")
 
 
-def _openai(prompt: str) -> tuple[str, int | None, int | None]:
+def _openai(prompt: str) -> tuple[str, int | None, int | None, str]:
     from openai import OpenAI
     client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     response = client.chat.completions.create(
@@ -99,4 +107,4 @@ def _openai(prompt: str) -> tuple[str, int | None, int | None]:
         o = response.usage.completion_tokens
     except Exception:
         i, o = None, None
-    return text, i, o
+    return text, i, o, OPENAI_MODEL

@@ -3,6 +3,7 @@ import json
 from datetime import datetime, timezone
 
 import config
+from langfuse.types import TraceContext
 from orchestrator.graph import build_graph, build_graph_skip_detection
 from state.schema import DEALtaState
 
@@ -108,7 +109,37 @@ def generate_escalation_items(result: dict) -> list:
 
 print(f"\n[run] {args.contract_id}: {args.prev_version} → {args.curr_version}")
 config.current_trace_id = config.langfuse.create_trace_id()
+config.current_trace = config.langfuse.start_observation(
+    trace_context=TraceContext(trace_id=config.current_trace_id),
+    name="dealta-pipeline-run",
+    as_type="span",
+    input={
+        "contract_id": args.contract_id,
+        "prev_version": args.prev_version,
+        "curr_version": args.curr_version,
+        "run_id": "run_001",
+    },
+    metadata={
+        "tags": [args.contract_id, f"{args.prev_version}_to_{args.curr_version}"],
+    },
+)
 result = graph.invoke(initial_state)
+
+dp = result.get("decision_pack", {})
+config.current_trace.update(
+    output={
+        "overall_recommendation": dp.get("overall_recommendation"),
+        "changes_detected": len(result.get("detected_changes", [])),
+        "policy_flags": len(result.get("policy_flags", [])),
+        "compound_risks": len(result.get("compound_risks", [])),
+        "invalidated_signoffs": sum(1 for s in result.get("sign_offs", []) if s.get("invalidated")),
+        "agent_summaries": [
+            {"agent": t["agent"], "output": t["outputs_summary"]}
+            for t in result.get("agent_traces", [])
+        ],
+    }
+)
+config.current_trace.end()
 config.langfuse.flush()
 
 result["escalation_items"] = generate_escalation_items(result)

@@ -942,13 +942,19 @@
           <tr>
             <th>Agent</th>
             <th>Time (s)</th>
+            <th>% time</th>
             <th>Input tok</th>
             <th>Output tok</th>
+            <th>Tok/s</th>
             <th>Est. cost</th>
+            <th>% cost</th>
           </tr>
         </thead>
         <tbody id="metrics-body"></tbody>
       </table>
+    </div>
+    <div class="card fade-in" style="margin-top:1rem;">
+      <div id="metrics-insights" style="font-size:0.875rem;line-height:1.7;color:var(--text-secondary);"></div>
     </div>
   </div>
 </section>
@@ -1181,14 +1187,23 @@
       totalIn   += m.input_tokens;
       totalOut  += m.output_tokens;
       totalCost += m.est_cost_usd;
+    });
+
+    data.pipeline_metrics.forEach(function(m) {
+      var pctTime = ((m.wall_time_s / totalTime) * 100).toFixed(0) + '%';
+      var pctCost = ((m.est_cost_usd / totalCost) * 100).toFixed(0) + '%';
+      var toks    = m.wall_time_s > 0 ? Math.round(m.output_tokens / m.wall_time_s) : '—';
 
       var tr = el('tr');
       tr.innerHTML =
-        '<td>' + m.agent.replace('_', ' ') + '</td>'
+        '<td>' + m.agent.replace(/_/g, ' ') + '</td>'
         + '<td class="mono">' + m.wall_time_s + '</td>'
+        + '<td class="mono">' + pctTime + '</td>'
         + '<td class="mono">' + m.input_tokens.toLocaleString() + '</td>'
         + '<td class="mono">' + m.output_tokens.toLocaleString() + '</td>'
-        + '<td class="mono">$' + m.est_cost_usd.toFixed(6) + '</td>';
+        + '<td class="mono">' + toks + '</td>'
+        + '<td class="mono">$' + m.est_cost_usd.toFixed(6) + '</td>'
+        + '<td class="mono">' + pctCost + '</td>';
       tbody.appendChild(tr);
     });
 
@@ -1196,10 +1211,24 @@
     totalRow.innerHTML =
       '<td>TOTAL</td>'
       + '<td>' + totalTime.toFixed(2) + 's</td>'
+      + '<td>100%</td>'
       + '<td>' + totalIn.toLocaleString() + '</td>'
       + '<td>' + totalOut.toLocaleString() + '</td>'
-      + '<td>$' + totalCost.toFixed(6) + '</td>';
+      + '<td>—</td>'
+      + '<td>$' + totalCost.toFixed(6) + '</td>'
+      + '<td>100%</td>';
     tbody.appendChild(totalRow);
+
+    // Interpretation block
+    var insights = document.getElementById('metrics-insights');
+    if (insights) {
+      insights.innerHTML =
+        '<ul>'
+        + '<li><strong>change_detection dominates by design.</strong> 40% of time, 42% of cost — it reads both full contract versions to extract structured diffs. That input load is the job, not inefficiency.</li>'
+        + '<li><strong>policy_check is the cost anomaly.</strong> 12% of time but 19% of cost. Only 328 output tokens from 2,976 input — an 11:1 ratio. Cost is driven by the large policy rule context it must read, not by its output length.</li>'
+        + '<li><strong>decision_pack is the most efficient agent.</strong> 8% of time, 5% of cost, 82 output tokens. Deterministic Python logic handles the recommendation — the LLM only writes one narrative paragraph.</li>'
+        + '</ul>';
+    }
   }
 
   function initObserver() {

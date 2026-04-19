@@ -169,6 +169,30 @@
       "invalidated_by_change_id": "C3",
       "invalidated_in_version": "v3",
       "timestamp": "2026-04-04T17:52:58.658888+00:00"
+    },
+    {
+      "signoff_id": "SO-004",
+      "function": "Product/Tech",
+      "issue_id": null,
+      "approved": false,
+      "conditions": "Flagged concerns around integration obligations and API dependency clauses. No formal sign-off granted pending resolution.",
+      "signed_off_in_version": null,
+      "invalidated": false,
+      "invalidated_by_change_id": null,
+      "invalidated_in_version": null,
+      "timestamp": "2026-04-04T17:52:58.658888+00:00"
+    },
+    {
+      "signoff_id": "SO-005",
+      "function": "Customer Support",
+      "issue_id": null,
+      "approved": false,
+      "conditions": "Flagged concerns around content accuracy SLA obligations. No formal sign-off granted pending resolution.",
+      "signed_off_in_version": null,
+      "invalidated": false,
+      "invalidated_by_change_id": null,
+      "invalidated_in_version": null,
+      "timestamp": "2026-04-04T17:52:58.658888+00:00"
     }
   ],
   "escalation_items": [

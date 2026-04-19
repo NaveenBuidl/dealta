@@ -444,6 +444,7 @@
     .status-invalidated { color: var(--accent-red); }
     .status-required    { color: var(--accent-amber); }
     .status-ok          { color: var(--accent-green); }
+    .status-flagged     { color: var(--text-secondary); }
 
     /* Metrics table */
     .metrics-table {
@@ -838,7 +839,7 @@
     <div class="fade-in">
       <div class="section-label">Section 08</div>
       <h2>Required sign-off status</h2>
-      <p class="section-sub">Current approval gate status across business functions.</p>
+      <p class="section-sub">Sign-off status for functions with formal approvals recorded in v2. Product/Tech and Customer Support flagged concerns but did not formally sign off — see scenario for context.</p>
     </div>
     <div class="signoff-grid fade-in" id="signoff-status-grid"></div>
   </div>
@@ -1149,6 +1150,8 @@
   function renderSignoffStatus(data) {
     var grid = document.getElementById('signoff-status-grid');
     var required = data.decision_pack.required_sign_offs;
+
+    // Render formally signed-off functions (from decision_pack)
     Object.keys(required).forEach(function(fn) {
       var status = required[fn];
       var tile = el('div', 'signoff-tile');
@@ -1158,6 +1161,16 @@
       tile.innerHTML = '<div class="signoff-fn">' + fn + '</div>'
         + '<div class="signoff-status ' + cls + '">' + status + '</div>';
       grid.appendChild(tile);
+    });
+
+    // Render flagged functions (approved: false in sign_offs, not in required)
+    data.sign_offs.forEach(function(s) {
+      if (!s.approved && !required[s.function]) {
+        var tile = el('div', 'signoff-tile');
+        tile.innerHTML = '<div class="signoff-fn">' + s.function + '</div>'
+          + '<div class="signoff-status status-flagged">FLAGGED — NO SIGN-OFF</div>';
+        grid.appendChild(tile);
+      }
     });
   }
 

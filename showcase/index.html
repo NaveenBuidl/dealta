@@ -1224,9 +1224,9 @@
     if (insights) {
       insights.innerHTML =
         '<ul>'
-        + '<li><strong>change_detection dominates by design.</strong> 40% of time, 42% of cost — it reads both full contract versions to extract structured diffs. That input load is the job, not inefficiency.</li>'
-        + '<li><strong>policy_check is the cost anomaly.</strong> 12% of time but 19% of cost. Only 328 output tokens from 2,976 input — an 11:1 ratio. Cost is driven by the large policy rule context it must read, not by its output length.</li>'
-        + '<li><strong>decision_pack is the most efficient agent.</strong> 8% of time, 5% of cost, 82 output tokens. Deterministic Python logic handles the recommendation — the LLM only writes one narrative paragraph.</li>'
+        + '<li><strong>change detection dominates by design.</strong> 40% of time, 42% of cost — it reads both full contract versions to extract structured diffs. That input load is the job, not inefficiency.</li>'
+        + '<li><strong>policy check is the cost anomaly.</strong> 12% of time but 19% of cost. Only 328 output tokens from 2,976 input — an 11:1 ratio. Cost is driven by the large policy rule context it must read, not by its output length.</li>'
+        + '<li><strong>decision pack is the most efficient agent.</strong> 8% of time, 5% of cost, 82 output tokens. Deterministic Python logic handles the recommendation — the LLM only writes one narrative paragraph.</li>'
         + '</ul>';
     }
   }

@@ -721,6 +721,7 @@
       <a href="#" onclick="return false;" style="color: #999; pointer-events: none; cursor: default;">Demo Video →</a>
     </div>
     <p class="hero-origin">Built from experience coordinating a supplier agreement across Legal, Finance, Commercial, Product/Tech, and Customer Support.</p>
+    <p class="hero-origin" style="margin-top:0.75rem;max-width:640px;margin-left:auto;margin-right:auto;font-style:italic;color:var(--text-secondary);">At a previous role, I coordinated a supplier agreement renegotiation across five business functions. By the third round, Finance had approved commission terms that v3 silently changed. Legal had signed off on liability terms that v3 made asymmetric. No single reviewer had visibility across all three broken approvals at once — and the contract was heading toward execution. The failure mode wasn't "nobody reviewed it." It was "everyone reviewed their part, and nobody saw the whole." DEALta is designed to catch that.</p>
 
     <div class="verdict-banner">
       <div class="verdict-dot"></div>
@@ -744,7 +745,7 @@
         <div class="scenario-col">
           <p class="scenario-col-label">The deal</p>
           <p class="scenario-text">Nexus, a travel platform, is finalising a supplier agreement with StayLink, an accommodation provider. The agreement governs commission structure, payment terms, liability, and content obligations.</p>
-          <p class="scenario-text">In v2, five business functions reviewed the agreement. Legal, Finance, and Commercial each granted conditional approval — with specific terms that had to hold for their sign-off to remain valid.</p>
+          <p class="scenario-text">In v2, five business functions reviewed the agreement: <strong>Legal</strong> (liability and governing law), <strong>Finance</strong> (commission and payment terms), <strong>Commercial</strong> (revenue structure), <strong>Product/Tech</strong> (integration obligations), and <strong>Customer Support</strong> (content accuracy SLAs). Legal, Finance, and Commercial each granted conditional approval — with specific terms that had to hold for their sign-off to remain valid. Product/Tech and Customer Support flagged concerns but did not formally sign off.</p>
           <p class="scenario-text">v3 arrived. Four clauses changed. Three of those conditions were broken.</p>
         </div>
         <div class="scenario-col">
@@ -864,6 +865,14 @@
         <div class="arch-box"><span class="arch-name">Decision Pack</span><span class="arch-cap">assembles recommendation</span></div>
       </div>
       <p class="arch-philosophy"><em>Deterministic recommendation logic. LLM writes one paragraph. Everything structural is Python.</em></p>
+      <div style="margin-top:1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;font-size:0.8rem;color:var(--text-secondary);line-height:1.6;">
+        <div><strong style="color:var(--text-primary);">Change Detection</strong><br>Reads both contract versions in full. Everything downstream depends on this output — no agent can run without it.</div>
+        <div><strong style="color:var(--text-primary);">Invalidation</strong><br>Matches changes against prior sign-off conditions. LLM judges whether natural-language conditions are breached.</div>
+        <div><strong style="color:var(--text-primary);">Routing</strong><br>Assigns each change to a business function. Needs change list only — runs before policy to keep routing logic clean.</div>
+        <div><strong style="color:var(--text-primary);">Policy Check</strong><br>Checks each change against rules.json. Needs change list only. Output feeds dependency analysis.</div>
+        <div><strong style="color:var(--text-primary);">Dependency Check</strong><br>Identifies compound risks across change combinations. Requires policy violations as input — can't run earlier.</div>
+        <div><strong style="color:var(--text-primary);">Decision Pack</strong><br>Python counts violations and sets ESCALATE/APPROVE/REJECT. LLM writes one narrative paragraph. Needs all prior outputs.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1224,9 +1233,9 @@
     if (insights) {
       insights.innerHTML =
         '<ul>'
-        + '<li><strong>change detection dominates by design.</strong> 40% of time, 42% of cost — it reads both full contract versions to extract structured diffs. That input load is the job, not inefficiency.</li>'
-        + '<li><strong>policy check is the cost anomaly.</strong> 12% of time but 19% of cost. Only 328 output tokens from 2,976 input — an 11:1 ratio. Cost is driven by the large policy rule context it must read, not by its output length.</li>'
-        + '<li><strong>decision pack is the most efficient agent.</strong> 8% of time, 5% of cost, 82 output tokens. Deterministic Python logic handles the recommendation — the LLM only writes one narrative paragraph.</li>'
+        + '<li><strong>change_detection dominates by design.</strong> 40% of time, 42% of cost — it reads both full contract versions to extract structured diffs. That input load is the job, not inefficiency.</li>'
+        + '<li><strong>policy_check is the cost anomaly.</strong> 12% of time but 19% of cost. Only 328 output tokens from 2,976 input — an 11:1 ratio. Cost is driven by the large policy rule context it must read, not by its output length.</li>'
+        + '<li><strong>decision_pack is the most efficient agent.</strong> 8% of time, 5% of cost, 82 output tokens. Deterministic Python logic handles the recommendation — the LLM only writes one narrative paragraph.</li>'
         + '</ul>';
     }
   }
